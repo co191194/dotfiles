@@ -63,16 +63,24 @@ else
   --   }
   -- )
 
-  local js = augroup("my_javascript", {})
-  autocmd({ "BufEnter", "BufWinEnter" }, {
-    group = js,
-    pattern = { "*.js", "*.mjs", "*.cjs" },
-    callback = function()
-      opt.tabstop = 2
-      opt.shiftwidth = 0
-      opt.expandtab = true
-    end,
-  })
+  function setIndent(filetype, tabstop, shiftwidth, expandtab)
+    autocmd("FileType", {
+      pattern = filetype,
+      callback = function()
+        set("tabstop", tabstop, {})
+        set("shiftwidth", shiftwidth, {})
+        set("expandtab", expandtab, {})
+      end,
+    })
+  end
+
+  setIndent("html", 2, 0, true)
+  setIndent("css", 2, 0, true)
+  setIndent("javascript", 4, 0, false)
+  setIndent("java", 4, 0, false)
+  setIndent("lua", 2, 0, true)
+  setIndent("python", 2, 0, true)
+
 
   -- 画面下部にターミナルを表示する
   createCmd("T", function(cmd)

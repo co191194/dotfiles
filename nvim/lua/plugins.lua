@@ -71,6 +71,7 @@ local vscode_plugins = {}
 
 -- neovim用のプラグイン
 local neovim_plugins = {
+  { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
   {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.5",
@@ -80,7 +81,6 @@ local neovim_plugins = {
       require("configs/telescope")
     end,
   },
-  { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
@@ -217,6 +217,14 @@ local neovim_plugins = {
     "rcarriga/nvim-notify",
     config = function()
       require("configs.nvim-notify")
+    end,
+  },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {},
+    config = function()
+      require("configs.indent-blankline")
     end,
   },
 }
