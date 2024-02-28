@@ -114,7 +114,3 @@ keyset("n", "<leader>fb", ":Telescope file_browser<CR>", {})
 
 -- open file_browser with the path of the current buffer
 keyset("n", "<leader>fB", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", { noremap = true })
-
-vim.api.nvim_create_user_command("Ex", function()
-  require("telescope").extensions.file_browser.file_browser()
-end, {})
