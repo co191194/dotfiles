@@ -30,7 +30,10 @@ else
     set("shellpipe", '2>&1 | %%{ "$_" } | Tee-Object %s; exit $LastExitCode', {})
     set("shellquote", "", {})
     set("shellxquote", "", {})
-    g.python3_host_prog = "C:/Users/bigfi/AppData/Local/Programs/Python/Python312/python.exe"
+    g.python3_host_prog = vim.fn.expand("$USERPROFILE") .. [[\.pyenv\pyenv-win\shims\python3.bat]]
+    vim.keymap.set("n", "<M-t>", function()
+      print(vim.fn.expand("$USERPROFILE") .. [[\test\test]])
+    end, {})
   end
 
   set("laststatus", 3, {})

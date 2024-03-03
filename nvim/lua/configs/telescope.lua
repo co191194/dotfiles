@@ -68,9 +68,9 @@ require("telescope").load_extension("file_browser")
 local keyset = vim.keymap.set
 local builtin = require("telescope.builtin")
 -- ファイル検索
-keyset("n", "<C-p>", builtin.find_files, {})
+keyset("n", "<leader>ff", builtin.find_files, {})
 -- ドットファイルを検索対象にするファイル検索
-keyset("n", "<leader>ff", ":Telescope find_files hidden=true<CR>", {})
+keyset("n", "<leader>fF", ":Telescope find_files hidden=true<CR>", {})
 
 -- テキスト検索
 keyset("n", "<leader>/", builtin.live_grep, {})
