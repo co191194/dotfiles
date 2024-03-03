@@ -79,7 +79,7 @@ else
   setIndent("javascript", 4, 0, false)
   setIndent("java", 4, 0, false)
   setIndent("lua", 2, 0, true)
-  setIndent("python", 2, 0, true)
+  setIndent("python", 4, 0, true)
 
 
   -- 画面下部にターミナルを表示する
