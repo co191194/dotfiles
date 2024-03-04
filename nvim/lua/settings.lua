@@ -84,7 +84,6 @@ else
   setIndent("lua", 2, 0, true)
   setIndent("python", 4, 0, true)
 
-
   -- 画面下部にターミナルを表示する
   createCmd("T", function(cmd)
     vim.cmd([[
