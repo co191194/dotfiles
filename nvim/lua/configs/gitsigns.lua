@@ -43,6 +43,9 @@ require("gitsigns").setup({
   on_attach = function(bufnr)
     local gs = package.loaded.gitsigns
 
+    local function map(mode, l, r, opts)
+      vim.keymap.set(mode, l, r, opts or { noremap = true })
+    end
     -- Navigation
     map("n", "]c", function()
       if vim.wo.diff then
