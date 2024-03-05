@@ -1,32 +1,30 @@
-local keyset = vim.keymap.set
-local ex_keyset = vim.api.nvim_set_keymap
+local map = vim.keymap.set
 
-keyset("n", "*", "<Plug>(asterisk-*)", { noremap = false })
-keyset("n", "#", "<Plug>(asterisk-#)", { noremap = false })
-keyset("n", "g*", "<Plug>(asterisk-g*)", { noremap = false })
-keyset("n", "g#", "<Plug>(asterisk-g#)", { noremap = false })
-keyset("n", "z*", "<Plug>(asterisk-z*)", { noremap = false })
-keyset("n", "gz*", "<Plug>(asterisk-gz*)", { noremap = false })
-keyset("n", "z#", "<Plug>(asterisk-z#)", { noremap = false })
-keyset("n", "gz#", "<Plug>(asterisk-gz#)", { noremap = false })
+map("n", "*", "<Plug>(asterisk-*)", { noremap = false })
+map("n", "#", "<Plug>(asterisk-#)", { noremap = false })
+map("n", "g*", "<Plug>(asterisk-g*)", { noremap = false })
+map("n", "g#", "<Plug>(asterisk-g#)", { noremap = false })
+map("n", "z*", "<Plug>(asterisk-z*)", { noremap = false })
+map("n", "gz*", "<Plug>(asterisk-gz*)", { noremap = false })
+map("n", "z#", "<Plug>(asterisk-z#)", { noremap = false })
+map("n", "gz#", "<Plug>(asterisk-gz#)", { noremap = false })
 
 if vim.g.vscode == 1 then
 else
   -- ターミナルモードのキーマップ
-  keyset("t", "<Esc>", [[<C-\><C-n>]])
-  keyset("t", "<C-w>", [[<C-\><C-n><C-w>]])
-  keyset("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
-  keyset("t", "jk", "<C-\\><C-n>", { noremap = true, silent = true })
+  map("t", "<Esc>", [[<C-\><C-n>]])
+  map("t", "<C-w>", [[<C-\><C-n><C-w>]])
+  map("t", "jk", "<C-\\><C-n>", { noremap = true, silent = true })
   --keyset("t", "<C-W>", "<C-\\><C-N><C-W>")
   -- insertモードの終了
-  keyset("i", "jj", "<ESC>", { noremap = true, silent = true })
+  map("i", "jj", "<ESC>", { noremap = true, silent = true })
 
   -- 日本語入力時
-  keyset("n", "あ", "a")
-  keyset("n", "い", "i")
-  keyset("n", "う", "u")
-  keyset("n", "え", "e")
-  keyset("n", "お", "o")
+  map("n", "あ", "a")
+  map("n", "い", "i")
+  map("n", "う", "u")
+  map("n", "え", "e")
+  map("n", "お", "o")
 
   -- Autocomplete
   function _G.check_back_space()
@@ -43,17 +41,17 @@ else
     -- NOTE: Use command ':verbose imap <tab>' to make sure Tab is not mapped by
     -- other plugins before putting this into your config
     local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
-    keyset(
+    map(
       "i",
       "<TAB>",
       'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()',
       opts
     )
-    keyset("i", "<S-TAB>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
+    map("i", "<S-TAB>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
 
     -- 保管機能でenterを押したときに改行しないようにする
     -- Make <CR> to accept selected completion item or notify coc.nvim to format
     -- <C-g>u breaks current undo, please make your own choice
-    keyset("i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
+    map("i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
   end
 end

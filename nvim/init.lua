@@ -6,4 +6,3 @@ require("plugins")
 require("settings")
 -- プラグイン関連以外のキーマップ
 require("keymaps")
-
