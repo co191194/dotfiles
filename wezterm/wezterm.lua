@@ -10,11 +10,14 @@ local config = wezterm.config_builder()
 
 -- This is where you actually apply your config choices
 
--- For example, changing the color scheme:
 -- config.color_scheme = 'AdventureTime'
-config.color_scheme = "Catppuccin Macchiato"
+-- config.color_scheme = "Catppuccin Macchiato"
+-- config.color_scheme = "arcoiris"
+-- config.color_scheme = "Blue Matrix"
+-- config.color_scheme = "BlulocoDark"
+config.color_scheme = "Firefly Traditional"
 
-config.window_background_opacity = 0.75
+config.window_background_opacity = 0.85
 
 config.default_prog = { "pwsh", "-Login" }
 
