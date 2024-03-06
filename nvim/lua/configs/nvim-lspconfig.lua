@@ -1,8 +1,6 @@
--- 補完プラグインであるcmp_nvim_lspをLSPと連携させています（後述）
 local cmp_nvim_lsp = require("cmp_nvim_lsp")
 local capabilities = cmp_nvim_lsp.default_capabilities()
 
--- この一連の記述で、mason.nvimでインストールしたLanguage Serverが自動的に個別にセットアップされ、利用可能になります
 require("neodev").setup()
 require("mason").setup()
 require("mason-lspconfig").setup({
@@ -12,6 +10,8 @@ require("mason-lspconfig").setup({
     "jdtls",
     "ruff_lsp",
     "rust_analyzer",
+    "html",
+    "emmet_ls",
   },
 })
 local lspconfig = require("lspconfig")
@@ -142,8 +142,6 @@ map("n", "<space>e", vim.diagnostic.open_float)
 map("n", "<space>q", vim.diagnostic.setloclist)
 map("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>")
 map("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>")
--- map("n", "<M-d>", "<cmd>Lspsaga term_toggle<CR>")
--- map("t", "<M-d>", "<C-\\><C-n><cmd>Lspsaga term_toggle<CR>")
 map("n", "<space>,", "<cmd>Lspsaga finder<CR>", {})
 
 -- Use LspAttach autocommand to only map the following keys
@@ -157,14 +155,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
-    -- map("n", "gD", vim.lsp.buf.declaration, opts)
-    -- map("n", "gd", vim.lsp.buf.definition, opts)
-    -- map("n", "K", vim.lsp.buf.hover, opts)
-    -- map("n", "gi", vim.lsp.buf.implementation, opts)
-    -- map("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-    -- map("n", "<space>rn", vim.lsp.buf.rename, opts)
-    -- map({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, opts)
-    -- map("n", "gr", vim.lsp.buf.references, opts)
 
     map("n", "gd", "<cmd>Lspsaga goto_definition<CR>")
     map("n", "gD", "<cmd>Lspsaga peek_definition<CR>")
