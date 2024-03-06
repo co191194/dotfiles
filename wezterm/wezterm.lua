@@ -19,7 +19,13 @@ config.color_scheme = "Firefly Traditional"
 
 config.window_background_opacity = 0.85
 
-config.default_prog = { "pwsh", "-Login" }
+local host_env = os.getenv("OS")
+if host_env == "Windows_NT" then
+	config.default_prog = { "pwsh", "-Login" }
+elseif host_env == "Linux" then
+	config.default_prog = { "bash", "-l" }
+elseif host_env == "Darwin" then
+end
 
 config.font_size = 14.0
 config.font = require("wezterm").font("HackGen Console NF")
