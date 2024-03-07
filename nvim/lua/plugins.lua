@@ -133,6 +133,19 @@ local neovim_plugins = {
     -- end,
   },
   {
+    "L3MON4D3/LuaSnip",
+    version = "v2.*",
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+      "saadparwaiz1/cmp_luasnip",
+    },
+    -- install jsregexp (optional!).
+    -- build = "make install_jsregexp",
+    config = function()
+      require("configs.luasnip")
+    end,
+  },
+  {
     "hrsh7th/nvim-cmp",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",

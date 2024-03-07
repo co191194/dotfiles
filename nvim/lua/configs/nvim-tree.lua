@@ -39,11 +39,15 @@ require("nvim-tree").setup({
 
 local is_first = true
 vim.api.nvim_create_user_command("Ex", function()
-  api.tree.toggle()
   if is_first then
+    api.tree.open()
     is_first = false
     vim.cmd([[hi NvimTreeNormal guibg=NONE ctermbg=NONE]])
+  else
+    api.tree.focus()
   end
 end, {})
 
-vim.keymap.set("n", "<leader>er", [[<cmd>Ex<CR>]], {})
+vim.keymap.set("n", "<leader>tt", [[<cmd>Ex<CR>]], {})
+
+vim.keymap.set("n", "<leader>tf", api.tree.focus, {})
