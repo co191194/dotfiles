@@ -17,7 +17,7 @@ local config = wezterm.config_builder()
 -- config.color_scheme = "BlulocoDark"
 config.color_scheme = "Firefly Traditional"
 
-config.window_background_opacity = 0.85
+config.window_background_opacity = 0.75
 
 local host_env = os.getenv("OS")
 if host_env == "Windows_NT" then
