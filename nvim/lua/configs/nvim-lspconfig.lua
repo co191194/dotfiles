@@ -12,6 +12,8 @@ require("mason-lspconfig").setup({
     "rust_analyzer",
     "html",
     "emmet_ls",
+    "volar",
+    "tailwindcss",
   },
 })
 local lspconfig = require("lspconfig")

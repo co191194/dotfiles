@@ -28,7 +28,7 @@ cmp.setup({
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<C-l>"] = cmp.mapping.complete(),
     ["<C-e>"] = cmp.mapping.abort(),
-    ["<Esc>"] = cmp.mapping.abort(),
+    -- ["<Esc>"] = cmp.mapping.abort(),
     ["<C-y>"] = cmp.mapping.confirm({ select = true }),
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -37,8 +37,8 @@ cmp.setup({
         -- that way you will only jump inside the snippet region
       elseif luasnip.expand_or_jumpable() then
         luasnip.expand_or_jump()
-      elseif has_words_before() then
-        cmp.complete()
+      -- elseif has_words_before() then
+        -- cmp.complete()
       else
         fallback()
       end
