@@ -35,7 +35,7 @@ config.window_frame = {
 	font_size = 12.0,
 }
 
-config.disable_default_key_bindings = false
+config.disable_default_key_bindings = true
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 2000 }
 config.keys = require("keybinds").keys
 config.key_tables = require("keybinds").key_tables
