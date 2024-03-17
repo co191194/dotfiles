@@ -14,6 +14,7 @@ require("mason-lspconfig").setup({
     "emmet_ls",
     "volar",
     "tailwindcss",
+    "tsserver",
   },
 })
 local lspconfig = require("lspconfig")
@@ -84,6 +85,58 @@ require("mason-lspconfig").setup_handlers({
           -- Any extra CLI arguments for `ruff` go here.
           args = {},
         },
+      },
+    })
+  end,
+  ["tsserver"] = function()
+    lspconfig.tsserver.setup({
+      init_options = {
+        plugins = {
+          {
+            name = "@vue/typescript-plugin",
+            location = vim.fn.stdpath("data")
+              .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
+            languages = { "javascript", "typescript", "vue" },
+          },
+        },
+      },
+      filetypes = {
+        "javascript",
+        "typescript",
+        "vue",
+      },
+    })
+  end,
+  ["volar"] = function()
+    local util = require("lspconfig.util")
+    local function get_ts_server_path(root_dir)
+      local global_ts = vim.fn.stdpath("data")
+        .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
+      local local_ts = ""
+      local function check_dir(path)
+        local_ts = util.path.join(path, "node_modules", "typescript", "lib")
+        if util.path.exists(local_ts) then
+          return path
+        end
+      end
+
+      if util.search_ancestors(root_dir, check_dir) then
+        return local_ts
+      else
+        return global_ts
+      end
+    end
+    lspconfig.volar.setup({
+      on_new_config = function(new_config, new_root_dir)
+        new_config.init_options.typescript.tsdk = get_ts_server_path(new_root_dir)
+      end,
+      filetypes = {
+        "typescript",
+        "javascript",
+        "javascriptreact",
+        "typescriptreact",
+        "vue",
+        "json",
       },
     })
   end,

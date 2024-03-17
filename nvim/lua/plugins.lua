@@ -204,6 +204,10 @@ local neovim_plugins = {
       require("nvim-navic").setup({
         lsp = {
           auto_attach = true,
+          preference = {
+            "volar",
+            "tsserver",
+          },
         },
       })
     end,
