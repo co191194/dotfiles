@@ -15,6 +15,7 @@ require("mason-lspconfig").setup({
     "volar",
     "tailwindcss",
     "tsserver",
+    "cssls",
   },
 })
 local lspconfig = require("lspconfig")

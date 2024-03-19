@@ -1,12 +1,20 @@
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
+format = "$all"
+
 # Inserts a blank line between shell prompts
 add_newline = true
 
 [character]
-success_symbol = "[⤇>](bold green)"
+success_symbol = "[🠊](bold green)"
 error_symbol = "[🠈](bold red)"
+
+[directory]
+truncation_length = 5 
+truncate_to_repo = false
+truncation_symbol = "../"
+use_os_path_sep = false
 
 [package]
 disabled = false
@@ -15,4 +23,7 @@ disabled = false
 style_user = "white bold"
 style_root = "black bold"
 format = "user: [$user]($style) "
+disabled = false
+
+[os]
 disabled = false

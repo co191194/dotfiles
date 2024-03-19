@@ -1,20 +1,12 @@
--- ウィンドウバータイトルとタブタイトルの設定
+-- window's bar and tab settings
 require("format")
--- ステータスバーの設定
+-- status settings 
 require("status")
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 
--- This will hold the configuration.
 local config = wezterm.config_builder()
 
--- This is where you actually apply your config choices
-
--- config.color_scheme = 'AdventureTime'
--- config.color_scheme = "Catppuccin Macchiato"
--- config.color_scheme = "arcoiris"
--- config.color_scheme = "Blue Matrix"
--- config.color_scheme = "BlulocoDark"
 config.color_scheme = "Firefly Traditional"
 
 config.window_background_opacity = 0.75
@@ -37,10 +29,30 @@ config.window_frame = {
 
 config.disable_default_key_bindings = true
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 2000 }
-config.keys = require("keybinds").keys
-config.key_tables = require("keybinds").key_tables
+local keybinds = require("keybinds")
+config.keys = keybinds.keys
+config.key_tables = keybinds.key_tables
 
 config.status_update_interval = 1000
 
--- and finally, return the configuration to wezterm
+local act = wezterm.action
+
+config.disable_default_mouse_bindings = false
+config.mouse_bindings = {
+	-- right click copy & paste
+	{
+		event = { Down = { streak = 1, button = "Right" } },
+		mods = "NONE",
+		action = wezterm.action_callback(function(window, pane)
+			local is_selection = window:get_selection_text_for_pane(pane) ~= ""
+			if is_selection then
+				window:perform_action(act.CopyTo("ClipboardAndPrimarySelection"), pane)
+				window:perform_action(act.ClearSelection, pane)
+			else
+				window:perform_action(act({ PasteFrom = "Clipboard" }), pane)
+			end
+		end),
+	},
+}
+
 return config
