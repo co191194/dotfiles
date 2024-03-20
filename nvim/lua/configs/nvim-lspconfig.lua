@@ -149,6 +149,7 @@ require("mason-null-ls").setup({
   ensure_installed = {
     "stylua",
     "selene",
+    "prettier",
   },
   automatic_installation = false,
   ignore_methods = {
@@ -166,6 +167,9 @@ require("mason-null-ls").setup({
     selene = function(source_name, methods)
       null_ls.register(null_ls.builtins.diagnostics.selene)
     end,
+    prettier = function(source_name, methods)
+      null_ls.register(null_ls.builtins.formatting.prettier)
+    end
   },
 })
 
@@ -224,6 +228,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.lsp.buf.format({
         timeout_ms = 200,
         async = true,
+        filter = function(client)
+          return client.name ~= "tsserver"
+        end,
       })
     end, opts)
     map("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)

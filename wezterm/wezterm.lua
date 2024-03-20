@@ -20,10 +20,10 @@ elseif host_env == "Darwin" then
 end
 
 config.font_size = 14.0
-config.font = require("wezterm").font("HackGen Console NF")
+config.font = require("wezterm").font({ family = "HackGen Console NF", weight = "Regular" })
 
 config.window_frame = {
-	font = wezterm.font({ family = "Roboto", weight = "Bold" }),
+	font = wezterm.font({ family = "HackGen Console NF", weight = "Bold" }),
 	font_size = 12.0,
 }
 
