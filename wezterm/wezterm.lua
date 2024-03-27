@@ -2,6 +2,7 @@
 require("format")
 -- status settings 
 require("status")
+require("event")
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 
@@ -35,24 +36,10 @@ config.key_tables = keybinds.key_tables
 
 config.status_update_interval = 1000
 
-local act = wezterm.action
+config.window_decorations = "RESIZE"
 
+local mousebinds = require("mousebinds");
 config.disable_default_mouse_bindings = false
-config.mouse_bindings = {
-	-- right click copy & paste
-	{
-		event = { Down = { streak = 1, button = "Right" } },
-		mods = "NONE",
-		action = wezterm.action_callback(function(window, pane)
-			local is_selection = window:get_selection_text_for_pane(pane) ~= ""
-			if is_selection then
-				window:perform_action(act.CopyTo("ClipboardAndPrimarySelection"), pane)
-				window:perform_action(act.ClearSelection, pane)
-			else
-				window:perform_action(act({ PasteFrom = "Clipboard" }), pane)
-			end
-		end),
-	},
-}
+config.mouse_bindings = mousebinds.mouse_bindings
 
 return config
