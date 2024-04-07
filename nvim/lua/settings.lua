@@ -22,15 +22,15 @@ else
     if vim.fn.executable("bash") == 1 then
       set("shell", "bash", {})
     end
-  elseif vim.fn.has("win32") then
-    set("shell", vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell", {})
+  elseif vim.fn.has("win32") == 1 then
+    set("shell", vim.fn.executable("pwsh") == 1 and "pwsh -nol -nop" or "powershell -NoLogo -NoProfile", {})
     opt.shellcmdflag =
-      "-nologo -NoProfile -ExecutionPolicy RemoteSigned -command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$PSStyle.OutputRendering = [System.Management.Automation.OutputRendering]::PlainText;"
+      "-nol -nop -ep RemoteSigned -c [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$PSStyle.OutputRendering=[System.Management.Automation.OutputRendering]::PlainText;"
     set("shellredir", '2>&1 | %%{ "$_" } | Out-File -Encoding UTF8 %s; exit $LastExitCode', {})
     set("shellpipe", '2>&1 | %%{ "$_" } | Tee-Object %s; exit $LastExitCode', {})
     set("shellquote", "", {})
     set("shellxquote", "", {})
-    g.python3_host_prog = vim.fn.expand("$USERPROFILE") .. [[\.pyenv\pyenv-win\shims\python3.bat]]
+    g.python3_host_prog = vim.fn.expand("$USERPROFILE") .. [[\.pyenv\pyenv-win\shims\python3]]
     vim.keymap.set("n", "<M-t>", function()
       print(vim.fn.expand("$USERPROFILE") .. [[\test\test]])
     end, {})
@@ -53,8 +53,6 @@ else
   set("winblend", 20, {})
   set("pumblend", 20, {})
   set("termguicolors", true, {})
-
-  cmd.colorscheme("vscode")
 
   -- local my_setting = augroup("my_setting", {})
   -- autocmd(
