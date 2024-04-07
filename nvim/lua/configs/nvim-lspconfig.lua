@@ -242,3 +242,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "<space>o", "<cmd>Lspsaga outline<CR>", {})
   end,
 })
+
+-- custom filetypes
+vim.api.nvim_create_autocmd({"FileType"}, {
+  pattern = "yaml",
+  group = vim.api.nvim_create_augroup("yamlDetect", {}),
+  callback = function ()
+    local current = vim.fn.expand("%:t:r")
+    if current == "docker-compose" or current == "compose" then
+      vim.opt.filetype = "yaml.docker-compose"
+    end
+  end,
+})

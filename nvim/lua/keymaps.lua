@@ -12,10 +12,8 @@ map("n", "gz#", "<Plug>(asterisk-gz#)", { noremap = false })
 if vim.g.vscode == 1 then
 else
   -- ターミナルモードのキーマップ
-  map("t", "<Esc>", [[<C-\><C-n>]])
+  map("t", "<Esc><Esc>", [[<C-\><C-n>]])
   map("t", "<C-w>", [[<C-\><C-n><C-w>]])
-  map("t", "jk", "<C-\\><C-n>", { noremap = true, silent = true })
-  --keyset("t", "<C-W>", "<C-\\><C-N><C-W>")
   -- insertモードの終了
   map("i", "jj", "<ESC>", { noremap = true, silent = true })
 
