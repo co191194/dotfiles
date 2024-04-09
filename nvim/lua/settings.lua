@@ -8,11 +8,13 @@ local set = vim.api.nvim_set_option_value
 
 -- 共通の設定
 local common = vim.api.nvim_create_augroup("my_common", {})
-vim.api.nvim_create_autocmd({ "InsertLeave", "CmdlineLeave" }, {
-  group = common,
-  pattern = { "*" },
-  command = "call system(['zenhan','0'])",
-})
+if vim.fn.executable("zenhan.exe") == 1 then
+  vim.api.nvim_create_autocmd({ "InsertLeave", "CmdlineLeave" }, {
+    group = common,
+    pattern = { "*" },
+    command = "call system(['zenhan.exe','0'])",
+  })
+end
 
 -- 個別の設定
 if vim.g.vscode == 1 then
