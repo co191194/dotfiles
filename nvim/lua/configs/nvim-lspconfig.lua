@@ -96,7 +96,7 @@ require("mason-lspconfig").setup_handlers({
           {
             name = "@vue/typescript-plugin",
             location = vim.fn.stdpath("data")
-              .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
+                .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
             languages = { "javascript", "typescript", "vue" },
           },
         },
@@ -112,7 +112,7 @@ require("mason-lspconfig").setup_handlers({
     local util = require("lspconfig.util")
     local function get_ts_server_path(root_dir)
       local global_ts = vim.fn.stdpath("data")
-        .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
+          .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
       local local_ts = ""
       local function check_dir(path)
         local_ts = util.path.join(path, "node_modules", "typescript", "lib")
@@ -150,6 +150,7 @@ require("mason-null-ls").setup({
     "stylua",
     "selene",
     "prettier",
+    "prettierd",
   },
   automatic_installation = false,
   ignore_methods = {
@@ -167,9 +168,9 @@ require("mason-null-ls").setup({
     selene = function(source_name, methods)
       null_ls.register(null_ls.builtins.diagnostics.selene)
     end,
-    prettier = function(source_name, methods)
-      null_ls.register(null_ls.builtins.formatting.prettier)
-    end
+    prettierd = function(source_name, methods)
+      null_ls.register(null_ls.builtins.formatting.prettierd)
+    end,
   },
 })
 
@@ -244,13 +245,58 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 -- custom filetypes
-vim.api.nvim_create_autocmd({"FileType"}, {
+vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = "yaml",
   group = vim.api.nvim_create_augroup("yamlDetect", {}),
-  callback = function ()
+  callback = function()
     local current = vim.fn.expand("%:t:r")
     if current == "docker-compose" or current == "compose" then
       vim.opt.filetype = "yaml.docker-compose"
     end
   end,
 })
+
+-- dap settings
+require("mason-nvim-dap").setup({
+  ensure_installed = { "python", "js", "chrome" },
+  automatic_installation = false,
+  handlers = {
+    function(config)
+      require("mason-nvim-dap").default_setup(config)
+    end,
+    python = function(config)
+      config.adapters = {
+        type = "executable",
+        command = "/usr/bin/python3",
+        args = {
+          "-m",
+          "debugpy.adapter",
+        },
+        require("mason-nvim-dap").default_setup(config),
+      }
+    end,
+  },
+})
+
+-- dap keymaps
+local dap_opts = function(desc)
+  return { desc = "nvim-dap : " .. desc, silent = true }
+end
+local dap = require("dap")
+map("n", "<F5>", "<cmd>DapContinue<CR>", dap_opts("Continue"))
+map("n", "<F10>", "<cmd>DapStepOver<CR>", dap_opts("StepOver"))
+map("n", "<F11>", "<cmd>DapStepInto<CR>", dap_opts("StepIn"))
+map("n", "<F12>", "<cmd>DapStepOut<CR>", dap_opts("StepOut"))
+map("n", "<leader>b", "<cmd>DapToggleBreakpoint<CR>", dap_opts("Toggle Breakpoint"))
+map("n", "<leader>B", function()
+  dap.set_breakpoint(vim.fn.input("Breakpoint condition: "), nil, nil)
+end, dap_opts("Set Condition Breakpoint"))
+map("n", "<leader>B", function()
+  dap.set_breakpoint(nil, nil, vim.fn.input("Log message: "))
+end, dap_opts("Set breakpoint and log message"))
+map("n", "<leader>dr", function()
+  dap.repl.open()
+end, dap_opts("Open a REPL / Debug-console"))
+map("n", "<leader>dl", function()
+  dap.run_last()
+end, dap_opts("Re-runs the last debug adapter"))

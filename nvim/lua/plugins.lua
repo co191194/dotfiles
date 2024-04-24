@@ -156,12 +156,19 @@ local neovim_plugins = {
     },
   },
   { "mfussenegger/nvim-jdtls" },
-  { "folke/neodev.nvim", opts = {} },
+  { "folke/neodev.nvim",                        opts = {} },
   {
     "nvimdev/lspsaga.nvim",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons",
+    },
+  },
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+      "rcarriga/nvim-dap-ui",
     },
   },
   {
@@ -266,6 +273,24 @@ local neovim_plugins = {
       -- refer to the configuration section below
     },
   },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    },
+    config = function ()
+      require("configs.noice")
+    end
+  },
 }
 
 local plugins = merge_tables(common_plugins, is_vscode and vscode_plugins or neovim_plugins)
@@ -276,8 +301,8 @@ local opts = {
     },
     reset_packpath = true, -- reset the package path to improve startup time
     rtp = {
-      reset = true, -- reset the runtime path to $VIMRUNTIME and your config directory
-      paths = {}, -- add any custom paths here that you want to includes in the rtp
+      reset = true,        -- reset the runtime path to $VIMRUNTIME and your config directory
+      paths = {},          -- add any custom paths here that you want to includes in the rtp
       disabled_plugins = {
         -- "gzip",
         -- "matchit",
