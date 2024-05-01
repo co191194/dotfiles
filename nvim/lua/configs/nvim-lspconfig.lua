@@ -46,8 +46,13 @@ require("mason-lspconfig").setup_handlers({
       group = my_jdtls_group,
       pattern = { "java" },
       callback = function()
-        -- jdtls.start_or_attach(config,{},{})
-        require("jdtls.jdtls_setup").setup()
+        -- require("jdtls.jdtls_setup").setup()
+        local jdtls_bin = vim.fn.stdpath("data") .. "/mason/bin/jdtls"
+        local config = {
+          cmd = { jdtls_bin },
+          root_dir = vim.fs.dirname(vim.fs.find({ "gradle", ".git", "mvnw" }, { upward = true })[1]),
+        }
+        require("jdtls").start_or_attach(config)
       end,
     })
   end,
@@ -96,7 +101,7 @@ require("mason-lspconfig").setup_handlers({
           {
             name = "@vue/typescript-plugin",
             location = vim.fn.stdpath("data")
-                .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
+              .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
             languages = { "javascript", "typescript", "vue" },
           },
         },
@@ -112,7 +117,7 @@ require("mason-lspconfig").setup_handlers({
     local util = require("lspconfig.util")
     local function get_ts_server_path(root_dir)
       local global_ts = vim.fn.stdpath("data")
-          .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
+        .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
       local local_ts = ""
       local function check_dir(path)
         local_ts = util.path.join(path, "node_modules", "typescript", "lib")

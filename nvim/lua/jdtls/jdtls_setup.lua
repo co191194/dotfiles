@@ -33,8 +33,9 @@ function M.setup()
   local lombok_path = path_to_jdtls .. "/lombok.jar"
 
     -- 💀
-  local path_to_jar = path_to_jdtls .. "/plugins/org.eclipse.equinox.launcher_1.6.700.v20231214-2017.jar"
+  local path_to_jar = path_to_jdtls .. "/plugins/org.eclipse.equinox.launcher_1.6.800.v20240304-1850.jar"
   -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
+  local pak = require("mason-registry").get_package("jdtls").spec.name
 
   local bundles = {
     vim.fn.glob(path_to_jdebug .. "/extension/server/com.microsoft.java.debug.plugin-*.jar", true),
