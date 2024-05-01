@@ -1,10 +1,9 @@
 require("toggleterm").setup({
-  open_mapping = { [[<c-\>]], [[c-¥]] },
+  open_mapping = { [[<c-\>]], [[<c-¥>]] },
 })
 
 local Terminal = require("toggleterm.terminal").Terminal
 
----@param mode string
 local map = function(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, opts or {})
 end
