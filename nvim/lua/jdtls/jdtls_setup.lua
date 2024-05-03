@@ -1,4 +1,19 @@
 local M = {}
+vim.api.nvim_create_user_command("TestFind", function()
+  print("Hi jdtls")
+  local path_to_mason_packages = vim.fn.stdpath("data") .. "/mason/packages"
+  local path_to_jdtls = path_to_mason_packages .. "/jdtls"
+  print(path_to_jdtls)
+  local find = vim.fs.find(
+    ---@param name string
+    ---@param _ string
+    function(name, _)
+      return name:match("org.eclipse.equinox.launcher_.*.v.*.jar")
+    end,
+    { type = "file", path = path_to_jdtls .. "/plugins" }
+  )
+  print(find[1])
+end, {})
 
 function M.setup()
   local jdtls = require("jdtls")
@@ -11,9 +26,7 @@ function M.setup()
   local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
   local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls/workspace/" .. project_name
 
-    -- 💀
   local path_to_mason_packages = vim.fn.stdpath("data") .. "/mason/packages"
-    -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
 
   local path_to_jdtls = path_to_mason_packages .. "/jdtls"
   local path_to_jdebug = path_to_mason_packages .. "/java-debug-adapter"
@@ -32,9 +45,19 @@ function M.setup()
   local path_to_config = path_to_jdtls .. "/" .. get_config_dir()
   local lombok_path = path_to_jdtls .. "/lombok.jar"
 
-    -- 💀
-  local path_to_jar = path_to_jdtls .. "/plugins/org.eclipse.equinox.launcher_1.6.800.v20240304-1850.jar"
-  -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
+  local function get_path_to_jar()
+    local findFiles = vim.fs.find(
+      ---@param name string
+      ---@param _ string
+      function(name, _)
+        return name:match("org.eclipse.equinox.launcher_.*.v.*.jar")
+      end,
+      { type = "file", path = path_to_jdtls .. "/plugins" }
+    )
+    return findFiles[1]
+  end
+
+  local path_to_jar = get_path_to_jar()
   local pak = require("mason-registry").get_package("jdtls").spec.name
 
   local bundles = {
@@ -47,7 +70,7 @@ function M.setup()
   local on_attach = function(_, bufnr)
     jdtls.setup_dap({ hotcodereplace = "auto" })
     jdtls_dap.setup_dap_main_class_configs()
-    jdtls_setup.add_commands()
+    -- jdtls_setup.add_commands()
 
     -- Create a command `:Format` local to the LSP buffer
     vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
@@ -64,27 +87,26 @@ function M.setup()
     }, bufnr)
 
     -- NOTE: comment out if you don't use Lspsaga
-    require 'lspsaga'.init_lsp_saga()
-
+    require("lspsaga").init_lsp_saga()
   end
 
   local capabilities = {
     workspace = {
-      configuration = true
+      configuration = true,
     },
     textDocument = {
       completion = {
         completionItem = {
-          snippetSupport = true
-        }
-      }
-    }
+          snippetSupport = true,
+        },
+      },
+    },
   }
 
   local config = {
     flags = {
       allow_incremental_sync = true,
-    }
+    },
   }
 
   config.cmd = {
@@ -210,10 +232,10 @@ function M.setup()
   config.on_attach = on_attach
   config.capabilities = capabilities
   config.on_init = function(client, _)
-    client.notify('workspace/didChangeConfiguration', { settings = config.settings })
+    client.notify("workspace/didChangeConfiguration", { settings = config.settings })
   end
 
-  local extendedClientCapabilities = require 'jdtls'.extendedClientCapabilities
+  local extendedClientCapabilities = require("jdtls").extendedClientCapabilities
   extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 
   config.init_options = {
@@ -222,7 +244,7 @@ function M.setup()
   }
 
   -- Start Server
-  require('jdtls').start_or_attach(config)
+  require("jdtls").start_or_attach(config)
 
   -- Set Java Specific Keymaps
   require("jdtls.keymaps")

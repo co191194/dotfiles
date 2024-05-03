@@ -37,17 +37,19 @@ require("nvim-tree").setup({
   on_attach = my_on_attach,
 })
 
-local is_first = true
 vim.api.nvim_create_user_command("Ex", function()
-  if is_first then
-    api.tree.open()
-    is_first = false
-    vim.cmd([[hi NvimTreeNormal guibg=NONE ctermbg=NONE]])
-  else
-    api.tree.focus()
-  end
+  vim.cmd([[hi NvimTreeNormal guibg=NONE ctermbg=NONE]])
+  api.tree.toggle()
 end, {})
 
-vim.keymap.set("n", "<leader>tt", [[<cmd>Ex<CR>]], {})
+---@param desc string
+local function opts(desc)
+  return { desc = "nvim-tree: " .. desc }
+end
 
-vim.keymap.set("n", "<leader>tf", api.tree.focus, {})
+vim.keymap.set("n", "<leader>tt", [[<cmd>Ex<CR>]], opts("toggle tree"))
+
+vim.keymap.set("n", "<leader>tf", function()
+  vim.cmd([[hi NvimTreeNormal guibg=NONE ctermbg=NONE]])
+  api.tree.focus()
+end, opts("focus tree"))

@@ -46,13 +46,13 @@ require("mason-lspconfig").setup_handlers({
       group = my_jdtls_group,
       pattern = { "java" },
       callback = function()
-        -- require("jdtls.jdtls_setup").setup()
-        local jdtls_bin = vim.fn.stdpath("data") .. "/mason/bin/jdtls"
-        local config = {
-          cmd = { jdtls_bin },
-          root_dir = vim.fs.dirname(vim.fs.find({ "gradle", ".git", "mvnw" }, { upward = true })[1]),
-        }
-        require("jdtls").start_or_attach(config)
+        require("jdtls.jdtls_setup").setup()
+        -- local jdtls_bin = vim.fn.stdpath("data") .. "/mason/bin/jdtls"
+        -- local config = {
+        --   cmd = { jdtls_bin },
+        --   root_dir = vim.fs.dirname(vim.fs.find({ "gradle", ".git", "mvnw" }, { upward = true })[1]),
+        -- }
+        -- require("jdtls").start_or_attach(config)
       end,
     })
   end,
