@@ -111,6 +111,10 @@ require("mason-lspconfig").setup_handlers({
         "typescript",
         "vue",
       },
+      on_attach = function (client, bufnr)
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentRangeFormattingProvider = false
+      end
     })
   end,
   ["volar"] = function()
@@ -174,7 +178,9 @@ require("mason-null-ls").setup({
       null_ls.register(null_ls.builtins.diagnostics.selene)
     end,
     prettierd = function(source_name, methods)
-      null_ls.register(null_ls.builtins.formatting.prettierd)
+      null_ls.register(null_ls.builtins.formatting.prettierd.with({
+        extra_filetypes = { "toml" },
+      }))
     end,
   },
 })
@@ -220,32 +226,45 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local opts = { buffer = ev.buf }
+    -- local opts = { buffer = ev.buf }
+    ---default opts func
+    ---@param desc string
+    ---@param options table
+    ---@return table
+    local function opts(desc, options)
+      local o = options
+      o.desc = "lsp: " .. desc
+      return o
+    end
+    local function opts1(desc)
+      return opts(desc, {})
+    end
+    local function opts2(desc)
+      return opts(desc, { buffer = ev.buf })
+    end
 
-    map("n", "gd", "<cmd>Lspsaga goto_definition<CR>")
-    map("n", "gD", "<cmd>Lspsaga peek_definition<CR>")
-    map("n", "K", "<cmd>Lspsaga hover_doc<CR>")
-    map("n", "<C-m>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
-    map("n", "<space>rn", "<cmd>Lspsaga rename<CR>")
-    map({ "n", "v" }, "<space>ca", "<cmd>Lspsaga code_action<CR>")
-    map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
-    map("n", "ge", "<cmd>Lspsaga show_line_diagnostics<CR>")
+    map("n", "gd", "<cmd>Lspsaga goto_definition<CR>", opts1("goto definition"))
+    map("n", "gD", "<cmd>Lspsaga peek_definition<CR>", opts1("peek definition"))
+    map("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts1("hover doc"))
+    map("n", "<C-m>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts1("signature help"))
+    map("n", "<space>rn", "<cmd>Lspsaga rename<CR>", opts1("rename"))
+    map({ "n", "v" }, "<space>ca", "<cmd>Lspsaga code_action<CR>", opts1("code action"))
+    map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts1("references"))
+    map("n", "ge", "<cmd>Lspsaga show_line_diagnostics<CR>", opts1("show line diagnostics"))
     map("n", "<space>f", function()
       vim.lsp.buf.format({
-        timeout_ms = 200,
+        timeout_ms = 500,
         async = true,
-        filter = function(client)
-          return client.name ~= "tsserver"
-        end,
+        bufnr = ev.buf,
       })
-    end, opts)
-    map("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
-    map("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
+    end, opts1("format"))
+    map("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts2("add workspace folder"))
+    map("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts2("remove workspace folder"))
     map("n", "<space>wl", function()
       print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts)
-    map("n", "<space>D", vim.lsp.buf.type_definition, opts)
-    map("n", "<space>o", "<cmd>Lspsaga outline<CR>", {})
+    end, opts2("list workspace folders"))
+    map("n", "<space>D", vim.lsp.buf.type_definition, opts2("type type definition"))
+    map("n", "<space>o", "<cmd>Lspsaga outline<CR>", opts1("outline"))
   end,
 })
 
