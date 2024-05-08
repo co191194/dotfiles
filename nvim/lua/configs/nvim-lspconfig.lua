@@ -47,12 +47,6 @@ require("mason-lspconfig").setup_handlers({
       pattern = { "java" },
       callback = function()
         require("jdtls.jdtls_setup").setup()
-        -- local jdtls_bin = vim.fn.stdpath("data") .. "/mason/bin/jdtls"
-        -- local config = {
-        --   cmd = { jdtls_bin },
-        --   root_dir = vim.fs.dirname(vim.fs.find({ "gradle", ".git", "mvnw" }, { upward = true })[1]),
-        -- }
-        -- require("jdtls").start_or_attach(config)
       end,
     })
   end,
@@ -101,7 +95,7 @@ require("mason-lspconfig").setup_handlers({
           {
             name = "@vue/typescript-plugin",
             location = vim.fn.stdpath("data")
-              .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
+                .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
             languages = { "javascript", "typescript", "vue" },
           },
         },
@@ -111,17 +105,17 @@ require("mason-lspconfig").setup_handlers({
         "typescript",
         "vue",
       },
-      on_attach = function (client, bufnr)
+      on_attach = function(client, bufnr)
         client.server_capabilities.documentFormattingProvider = false
         client.server_capabilities.documentRangeFormattingProvider = false
-      end
+      end,
     })
   end,
   ["volar"] = function()
     local util = require("lspconfig.util")
     local function get_ts_server_path(root_dir)
       local global_ts = vim.fn.stdpath("data")
-        .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
+          .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
       local local_ts = ""
       local function check_dir(path)
         local_ts = util.path.join(path, "node_modules", "typescript", "lib")
@@ -148,6 +142,10 @@ require("mason-lspconfig").setup_handlers({
         "vue",
         "json",
       },
+      on_attach = function(client, bufnr)
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentRangeFormattingProvider = false
+      end,
     })
   end,
 })
@@ -255,9 +253,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.lsp.buf.format({
         timeout_ms = 500,
         async = true,
-        bufnr = ev.buf,
       })
-    end, opts1("format"))
+    end, opts2("format"))
     map("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts2("add workspace folder"))
     map("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts2("remove workspace folder"))
     map("n", "<space>wl", function()
@@ -282,7 +279,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 
 -- dap settings
 require("mason-nvim-dap").setup({
-  ensure_installed = { "python", "js", "chrome" },
+  ensure_installed = { "python", "js", "chrome", "javadbg", "javatest" },
   automatic_installation = false,
   handlers = {
     function(config)
@@ -299,6 +296,8 @@ require("mason-nvim-dap").setup({
         require("mason-nvim-dap").default_setup(config),
       }
     end,
+    javadbg = nil,
+    javatest = nil,
   },
 })
 
@@ -307,20 +306,49 @@ local dap_opts = function(desc)
   return { desc = "nvim-dap : " .. desc, silent = true }
 end
 local dap = require("dap")
-map("n", "<F5>", "<cmd>DapContinue<CR>", dap_opts("Continue"))
-map("n", "<F10>", "<cmd>DapStepOver<CR>", dap_opts("StepOver"))
-map("n", "<F11>", "<cmd>DapStepInto<CR>", dap_opts("StepIn"))
-map("n", "<F12>", "<cmd>DapStepOut<CR>", dap_opts("StepOut"))
-map("n", "<leader>b", "<cmd>DapToggleBreakpoint<CR>", dap_opts("Toggle Breakpoint"))
+map("n", "<F5>", dap.continue, dap_opts("Continue"))
+map("n", "<F10>", dap.step_over, dap_opts("StepOver"))
+map("n", "<F11>", dap.step_into, dap_opts("StepIn"))
+map("n", "<F12>", dap.step_out, dap_opts("StepOut"))
+map("n", "<leader>b", dap.toggle_breakpoint, dap_opts("Toggle Breakpoint"))
 map("n", "<leader>B", function()
   dap.set_breakpoint(vim.fn.input("Breakpoint condition: "), nil, nil)
 end, dap_opts("Set Condition Breakpoint"))
-map("n", "<leader>B", function()
+map("n", "<leader>lp", function()
   dap.set_breakpoint(nil, nil, vim.fn.input("Log message: "))
 end, dap_opts("Set breakpoint and log message"))
-map("n", "<leader>dr", function()
-  dap.repl.open()
-end, dap_opts("Open a REPL / Debug-console"))
-map("n", "<leader>dl", function()
-  dap.run_last()
-end, dap_opts("Re-runs the last debug adapter"))
+map("n", "<leader>dr", dap.repl.open, dap_opts("Open a REPL / Debug-console"))
+map("n", "<leader>dl", dap.run_last, dap_opts("Re-runs the last debug adapter"))
+
+-- dapui setup
+local dapui = require("dapui")
+local dapui_config = require("dapui.config")
+dapui_config.layouts = {
+  {
+    elements = {
+      { id = "watches",     size = 0.20 },
+      { id = "stacks",      size = 0.20 },
+      { id = "breakpoints", size = 0.20 },
+      { id = "scopes",      size = 0.40 },
+    },
+    size = 64,
+    position = "right",
+  },
+  {
+    elements = {
+      "repl",
+      "console",
+    },
+    size = 0.20,
+    position = "bottom",
+  },
+}
+dapui.setup(dapui_config)
+
+-- dapui keymap
+local dapui_opts = function(desc)
+  return { desc = "dap-ui: " .. desc }
+end
+map("n", "<space>d", function()
+  dapui.toggle()
+end, dapui_opts("Toggle"))

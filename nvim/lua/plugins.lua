@@ -156,7 +156,7 @@ local neovim_plugins = {
     },
   },
   { "mfussenegger/nvim-jdtls" },
-  { "folke/neodev.nvim",                        opts = {} },
+  { "folke/neodev.nvim", opts = {} },
   {
     "nvimdev/lspsaga.nvim",
     dependencies = {
@@ -168,6 +168,7 @@ local neovim_plugins = {
     "jay-babu/mason-nvim-dap.nvim",
     dependencies = {
       "mfussenegger/nvim-dap",
+      "nvim-neotest/nvim-nio",
       "rcarriga/nvim-dap-ui",
     },
   },
@@ -287,9 +288,9 @@ local neovim_plugins = {
       --   If not available, we use `mini` as the fallback
       "rcarriga/nvim-notify",
     },
-    config = function ()
+    config = function()
       require("configs.noice")
-    end
+    end,
   },
 }
 
@@ -301,8 +302,8 @@ local opts = {
     },
     reset_packpath = true, -- reset the package path to improve startup time
     rtp = {
-      reset = true,        -- reset the runtime path to $VIMRUNTIME and your config directory
-      paths = {},          -- add any custom paths here that you want to includes in the rtp
+      reset = true, -- reset the runtime path to $VIMRUNTIME and your config directory
+      paths = {}, -- add any custom paths here that you want to includes in the rtp
       disabled_plugins = {
         -- "gzip",
         -- "matchit",
