@@ -161,7 +161,7 @@ require("mason-lspconfig").setup_handlers({
     })
   end,
   ["yamlls"] = function()
-    lspconfig.yamll.setup({
+    lspconfig.yamlls.setup({
       settings = {
         schemaStore = {
           enable = false,
