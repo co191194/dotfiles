@@ -16,6 +16,8 @@ require("mason-lspconfig").setup({
     "tailwindcss",
     "tsserver",
     "cssls",
+    "yamlls",
+    "jsonls",
   },
 })
 local lspconfig = require("lspconfig")
@@ -95,7 +97,7 @@ require("mason-lspconfig").setup_handlers({
           {
             name = "@vue/typescript-plugin",
             location = vim.fn.stdpath("data")
-                .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
+              .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
             languages = { "javascript", "typescript", "vue" },
           },
         },
@@ -115,7 +117,7 @@ require("mason-lspconfig").setup_handlers({
     local util = require("lspconfig.util")
     local function get_ts_server_path(root_dir)
       local global_ts = vim.fn.stdpath("data")
-          .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
+        .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
       local local_ts = ""
       local function check_dir(path)
         local_ts = util.path.join(path, "node_modules", "typescript", "lib")
@@ -148,6 +150,27 @@ require("mason-lspconfig").setup_handlers({
       end,
     })
   end,
+  ["jsonls"] = function()
+    lspconfig.jsonls.setup({
+      settings = {
+        json = {
+          schemas = require("schemastore").json.schemas(),
+          validate = { enable = true },
+        },
+      },
+    })
+  end,
+  ["yamlls"] = function()
+    lspconfig.yamll.setup({
+      settings = {
+        schemaStore = {
+          enable = false,
+          url = "",
+        },
+        schemas = require("schemastore").yaml.schemas(),
+      },
+    })
+  end,
 })
 
 local null_ls = require("null-ls")
@@ -156,7 +179,6 @@ require("mason-null-ls").setup({
   ensure_installed = {
     "stylua",
     "selene",
-    "prettier",
     "prettierd",
   },
   automatic_installation = false,
@@ -326,10 +348,10 @@ local dapui_config = require("dapui.config")
 dapui_config.layouts = {
   {
     elements = {
-      { id = "watches",     size = 0.20 },
-      { id = "stacks",      size = 0.20 },
+      { id = "watches", size = 0.20 },
+      { id = "stacks", size = 0.20 },
       { id = "breakpoints", size = 0.20 },
-      { id = "scopes",      size = 0.40 },
+      { id = "scopes", size = 0.40 },
     },
     size = 64,
     position = "right",

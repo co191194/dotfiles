@@ -1,12 +1,10 @@
-local cmd = vim.cmd
-local createCmd = vim.api.nvim_create_user_command
 local g = vim.g
 local opt = vim.opt
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 local set = vim.api.nvim_set_option_value
 
--- 共通の設定
+-- common settings 
 local common = vim.api.nvim_create_augroup("my_common", {})
 if vim.fn.executable("zenhan.exe") == 1 then
   vim.api.nvim_create_autocmd({ "InsertLeave", "CmdlineLeave" }, {
@@ -16,10 +14,14 @@ if vim.fn.executable("zenhan.exe") == 1 then
   })
 end
 
--- 個別の設定
+-- clipboard
+set("clipboard", "unnamedplus", {})
+
+-- vscode settings
 if vim.g.vscode == 1 then
+  return
 else
-  -- シェルの設定
+  -- shell settings 
   if vim.fn.has("linux") == 1 then
     if vim.fn.executable("bash") == 1 then
       set("shell", "bash", {})
@@ -56,17 +58,7 @@ else
   set("pumblend", 20, {})
   set("termguicolors", true, {})
 
-  -- local my_setting = augroup("my_setting", {})
-  -- autocmd(
-  --   {"BufEnter","BufWinEnter"}, {
-  --     group = my_setting,
-  --     callback = function()
-  --       opt.number = true
-  --     end,
-  --   }
-  -- )
-
-  function setIndent(filetype, tabstop, shiftwidth, expandtab)
+  local function setIndent(filetype, tabstop, shiftwidth, expandtab)
     autocmd("FileType", {
       pattern = filetype,
       callback = function()
@@ -83,16 +75,6 @@ else
   setIndent("java", 4, 0, false)
   setIndent("lua", 2, 0, true)
   setIndent("python", 4, 0, true)
-
-  -- 画面下部にターミナルを表示する
-  createCmd("T", function(cmd)
-    vim.cmd([[
-        split
-        wincmd j
-        resize 15
-        terminal
-      ]])
-  end, {})
 
   local term = augroup("my_term", {})
   autocmd({ "TermOpen" }, { group = term, command = "startinsert" })

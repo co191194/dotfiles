@@ -121,6 +121,7 @@ local neovim_plugins = {
   },
   "williamboman/mason.nvim",
   "williamboman/mason-lspconfig.nvim",
+  "b0o/schemastore.nvim",
   {
     "jay-babu/mason-null-ls.nvim",
     event = { "BufReadPre", "BufNewFile" },
