@@ -42,16 +42,7 @@ require("mason-lspconfig").setup_handlers({
       },
     })
   end,
-  ["jdtls"] = function()
-    local my_jdtls_group = vim.api.nvim_create_augroup("MyJdtlsGroup", {})
-    vim.api.nvim_create_autocmd({ "FileType" }, {
-      group = my_jdtls_group,
-      pattern = { "java" },
-      callback = function()
-        require("jdtls.jdtls_setup").setup()
-      end,
-    })
-  end,
+  ["jdtls"] = function() end,
   ["rust_analyzer"] = function()
     lspconfig.rust_analyzer.setup({
       settings = {
