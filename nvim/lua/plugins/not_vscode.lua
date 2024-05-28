@@ -1,3 +1,13 @@
+-- Get platform dependant build script
+local function tabnine_build_path()
+  -- Replace vim.uv with vim.loop if using NVIM 0.9.0 or below
+  if vim.uv.os_uname().sysname == "Windows_NT" then
+    return "pwsh.exe -file .\\dl_binaries.ps1"
+  else
+    return "./dl_binaries.sh"
+  end
+end
+
 return {
   -- { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' },
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -221,6 +231,13 @@ return {
     },
     config = function()
       require("configs.noice")
+    end,
+  },
+  {
+    "codota/tabnine-nvim",
+    build = tabnine_build_path(),
+    config = function()
+      require("configs.tabnine")
     end,
   },
 }
