@@ -10,6 +10,14 @@ local has_words_before = function()
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
+local toggle_complete = function (_)
+  if cmp.visible() then
+    cmp.mapping.close()
+  else
+    cmp.mapping.complete()
+  end
+end
+
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -25,7 +33,7 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ["<UP>"] = cmp.mapping.select_prev_item(),
     ["<DOWN>"] = cmp.mapping.select_next_item(),
-    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<C-Space>"] = toggle_complete,
     ["<C-l>"] = cmp.mapping.complete(),
     ["<C-e>"] = cmp.mapping.abort(),
     -- ["<Esc>"] = cmp.mapping.abort(),
@@ -35,8 +43,6 @@ cmp.setup({
         cmp.select_next_item()
       elseif luasnip.expand_or_locally_jumpable() then
         luasnip.expand_or_jump()
-      elseif has_words_before() then
-        cmp.complete()
       else
         fallback()
       end
@@ -89,7 +95,7 @@ cmp.setup.cmdline(":", {
     {
       name = "cmdline",
       option = {
-        ignore_cmds = { "Man", "!" },
+        ignore_cmds = { "Man", "!", "r!", "read!" },
       },
     },
   }),

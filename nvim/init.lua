@@ -6,5 +6,9 @@ require("settings")
 require("plugins")
 -- プラグイン関連以外のキーマップ
 require("keymaps")
--- カラースキーマの設定
-vim.cmd.colorscheme("vscode")
+
+-- 起動元がvscode以外の場合
+if not require("utils").is_vscode() then
+  -- カラースキーマの設定
+  vim.cmd.colorscheme("vscode")
+end

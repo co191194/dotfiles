@@ -26,4 +26,4 @@ format = "user: [$user]($style) "
 disabled = false
 
 [os]
-disabled = false
+disabled = true

@@ -164,8 +164,15 @@ require("mason-lspconfig").setup_handlers({
   end,
 })
 
+vim.api.nvim_create_autocmd({"FileType"}, {
+  group = vim.api.nvim_create_augroup("MyJdtls", {clear = true}),
+  pattern = {"java"},
+  callback = function (ev)
+    require("jdtls.jdtls_setup").setup()
+  end
+})
+
 local null_ls = require("null-ls")
-null_ls.setup()
 require("mason-null-ls").setup({
   ensure_installed = {
     "stylua",
@@ -188,13 +195,73 @@ require("mason-null-ls").setup({
     selene = function(source_name, methods)
       null_ls.register(null_ls.builtins.diagnostics.selene)
     end,
-    prettierd = function(source_name, methods)
-      null_ls.register(null_ls.builtins.formatting.prettierd.with({
+    prettier = function(source_name, methods)
+      null_ls.register(null_ls.builtins.formatting.prettier.with({
         extra_filetypes = { "toml" },
       }))
     end,
+    -- prettierd = function(source_name, methods)
+    --   null_ls.register(null_ls.builtins.formatting.prettierd.with({
+    --     extra_filetypes = { "toml" },
+    --   }))
+    -- end,
   },
 })
+local lsp_format = function (bufnr)
+  vim.lsp.buf.format({
+    filter = function (client)
+      return client.name == "null-ls"
+    end,
+    bufnr = bufnr
+  })
+end
+null_ls.setup({
+  on_attach = function(client, bufnr)
+    if client.supports_method("textDocument/formatting") then
+      vim.keymap.set("n", "<space>f", function()
+        lsp_format(bufnr)
+      end, { buffer = bufnr, desc = "lsp: Format" })
+    end
+    if client.supports_method("textDocument/rangeFormatting") then
+      vim.keymap.set("x", "<space>f", function()
+        vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+      end, { buffer = bufnr, desc = "lsp: Format" })
+    end
+  end,
+})
+
+-- local prettier = require("prettier")
+--
+-- prettier.setup({
+--   bin = "prettierd",
+--   filetypes = {
+--     "css",
+--     "graphql",
+--     "html",
+--     "javascript",
+--     "javascriptreact",
+--     "json",
+--     "less",
+--     "markdown",
+--     "scss",
+--     "typescript",
+--     "typescriptreact",
+--     "yaml",
+--   },
+--   ["null-ls"] = {
+--     condition = function()
+--       return prettier.config_exists({
+--         -- if `false`, skips checking `package.json` for `"prettier"` key
+--         check_package_json = true,
+--       })
+--     end,
+--     runtime_condition = function(params)
+--       -- return false to skip running prettier
+--       return true
+--     end,
+--     timeout = 5000,
+--   },
+-- })
 
 require("lspsaga").setup({
   lightbulb = {
@@ -262,12 +329,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map({ "n", "v" }, "<space>ca", "<cmd>Lspsaga code_action<CR>", opts1("code action"))
     map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts1("references"))
     map("n", "ge", "<cmd>Lspsaga show_line_diagnostics<CR>", opts1("show line diagnostics"))
-    map("n", "<space>f", function()
-      vim.lsp.buf.format({
-        timeout_ms = 500,
-        async = true,
-      })
-    end, opts2("format"))
+    -- map("n", "<space>f", function()
+    --   vim.lsp.buf.format({
+    --     timeout_ms = 500,
+    --     async = true,
+    --     bufnr = vim.api.nvim_get_current_buf(),
+    --   })
+    -- end, opts2("format"))
     map("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts2("add workspace folder"))
     map("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts2("remove workspace folder"))
     map("n", "<space>wl", function()

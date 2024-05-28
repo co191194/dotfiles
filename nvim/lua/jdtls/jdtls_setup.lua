@@ -87,7 +87,7 @@ function M.setup()
     }, bufnr)
 
     -- NOTE: comment out if you don't use Lspsaga
-    require("lspsaga").init_lsp_saga()
+    -- require("lspsaga").init_lsp_saga()
   end
 
   local capabilities = {

@@ -4,7 +4,7 @@ local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 local set = vim.api.nvim_set_option_value
 
--- common settings 
+-- common settings
 local common = vim.api.nvim_create_augroup("my_common", {})
 if vim.fn.executable("zenhan.exe") == 1 then
   vim.api.nvim_create_autocmd({ "InsertLeave", "CmdlineLeave" }, {
@@ -21,13 +21,13 @@ set("clipboard", "unnamedplus", {})
 if vim.g.vscode == 1 then
   return
 else
-  -- shell settings 
+  -- shell settings
   if vim.fn.has("linux") == 1 then
     if vim.fn.executable("bash") == 1 then
       set("shell", "bash", {})
     end
   elseif vim.fn.has("win32") == 1 then
-    set("shell", vim.fn.executable("pwsh") == 1 and "pwsh -nol -nop" or "powershell -NoLogo -NoProfile", {})
+    set("shell", vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell", {})
     opt.shellcmdflag =
       "-nol -nop -ep RemoteSigned -c [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$PSStyle.OutputRendering=[System.Management.Automation.OutputRendering]::PlainText;"
     set("shellredir", '2>&1 | %%{ "$_" } | Out-File -Encoding UTF8 %s; exit $LastExitCode', {})
