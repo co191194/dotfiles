@@ -1,9 +1,8 @@
 local themes = require("telescope.themes")
 local actions = require("telescope.actions")
 local fb_actions = require("telescope").extensions.file_browser.actions
-local trouble = require("trouble.providers.telescope")
-local telescope = require("telescope")
-telescope.setup({
+local trouble = require("trouble.sources.telescope")
+require("telescope").setup({
   defaults = {
     file_ignore_patterns = {
       -- 検索から除外するものを指定
@@ -29,11 +28,11 @@ telescope.setup({
       i = {
         ["<C-h>"] = actions.which_key,
         ["<esc>"] = actions.close,
-        ["<C-t>"] = trouble.open_with_trouble,
+        ["<C-t>"] = trouble.open,
       },
       n = {
         ["<C-h>"] = actions.which_key,
-        ["<C-t>"] = trouble.open_with_trouble,
+        ["<C-t>"] = trouble.open,
       },
     },
   },
