@@ -1,8 +1,9 @@
 local themes = require("telescope.themes")
 local actions = require("telescope.actions")
 local fb_actions = require("telescope").extensions.file_browser.actions
+local telescope = require("telescope")
 local trouble = require("trouble.sources.telescope")
-require("telescope").setup({
+telescope.setup({
   defaults = {
     file_ignore_patterns = {
       -- 検索から除外するものを指定
