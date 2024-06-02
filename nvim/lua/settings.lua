@@ -21,6 +21,10 @@ set("clipboard", "unnamedplus", {})
 if vim.g.vscode == 1 then
   return
 else
+  -- disable netrw at the very start of your init.lua
+  g.loaded_netrw = 1
+  g.loaded_netrwPlugin = 1
+
   -- shell settings
   if vim.fn.has("linux") == 1 then
     if vim.fn.executable("bash") == 1 then
