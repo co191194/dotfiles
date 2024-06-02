@@ -43,5 +43,5 @@ local opts = {
 require("lazy").setup({
   { import = "plugins.common", cond = true},
   { import = "plugins.vscode", cond = is_vscode()},
-  { import = "plugins.not_vscode", cond = not is_vscode()}
+  { import = "plugins.nvim", cond = not is_vscode()}
 }, opts)
