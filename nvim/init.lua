@@ -1,14 +1,14 @@
 vim.loader.enable()
 
--- 全体設定(autocmdを含む)
+-- nvim settings
 require("settings")
--- プラグインの設定
+-- plugins settings
 require("plugins")
--- プラグイン関連以外のキーマップ
+-- keymaps
 require("keymaps")
 
--- 起動元がvscode以外の場合
+-- not call nvim by vscode
 if not require("utils").is_vscode() then
-  -- カラースキーマの設定
+  -- setting colorscheme
   vim.cmd.colorscheme("vscode")
 end
