@@ -2,7 +2,8 @@ local themes = require("telescope.themes")
 local actions = require("telescope.actions")
 local fb_actions = require("telescope").extensions.file_browser.actions
 local trouble = require("trouble.providers.telescope")
-require("telescope").setup({
+local telescope = require("telescope")
+telescope.setup({
   defaults = {
     file_ignore_patterns = {
       -- 検索から除外するものを指定
@@ -59,10 +60,10 @@ require("telescope").setup({
     },
   },
 })
-require("telescope").load_extension("fzf")
+telescope.load_extension("fzf")
 -- To get telescope-file-browser loaded and working with telescope,
 -- you need to call load_extension, somewhere after setup function:
-require("telescope").load_extension("file_browser")
+telescope.load_extension("file_browser")
 
 -- telescopeのキーマップ
 local keyset = vim.keymap.set
