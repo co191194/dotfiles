@@ -177,6 +177,7 @@ require("mason-null-ls").setup({
   ensure_installed = {
     "stylua",
     "selene",
+    "prettier",
     "prettierd",
   },
   automatic_installation = false,
