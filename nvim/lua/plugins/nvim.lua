@@ -232,11 +232,11 @@ return {
       require("configs.noice")
     end,
   },
-  {
-    "codota/tabnine-nvim",
-    build = tabnine_build_path(),
-    config = function()
-      require("configs.tabnine")
-    end,
-  },
+  -- {
+  --   "codota/tabnine-nvim",
+  --   build = tabnine_build_path(),
+  --   config = function()
+  --     require("configs.tabnine")
+  --   end,
+  -- },
 }
