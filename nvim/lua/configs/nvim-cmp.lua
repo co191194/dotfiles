@@ -1,6 +1,4 @@
--- Lspkindのrequire
 local lspkind = require("lspkind")
---補完関係の設定
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 
@@ -10,11 +8,27 @@ local has_words_before = function()
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
-local toggle_complete = function (_)
+local toggle_complete = function(_)
   if cmp.visible() then
-    cmp.mapping.close()
+    cmp.abort()
   else
-    cmp.mapping.complete()
+    cmp.complete()
+  end
+end
+
+---close menu and docs
+---@param fallback function
+local close_complete = function(fallback)
+  local visible = cmp.visible()
+  local visible_docs = cmp.visible_docs()
+  if visible then
+    cmp.abort()
+  end
+  if visible_docs then
+    cmp.close_docs()
+  end
+  if not visible and not visible_docs then
+    fallback()
   end
 end
 
@@ -33,9 +47,11 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ["<UP>"] = cmp.mapping.select_prev_item(),
     ["<DOWN>"] = cmp.mapping.select_next_item(),
-    ["<C-Space>"] = toggle_complete,
-    ["<C-l>"] = cmp.mapping.complete(),
-    ["<C-e>"] = cmp.mapping.abort(),
+    ["<C-space>"] = cmp.mapping.complete(),
+    -- ["<C-l>"] = cmp.mapping.complete(),
+    ["<C-l>"] = cmp.mapping(toggle_complete, { "i" }),
+    -- ["<C-e>"] = cmp.mapping.abort(),
+    ["<C-e>"] = cmp.mapping(close_complete, { "i", "s", "x", "n" }),
     -- ["<Esc>"] = cmp.mapping.abort(),
     ["<C-y>"] = cmp.mapping.confirm({ select = true }),
     ["<Tab>"] = cmp.mapping(function(fallback)
@@ -67,11 +83,13 @@ cmp.setup({
       s = cmp.mapping.confirm({ select = true }),
       -- c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
     }),
+    ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
   }),
   experimental = {
     ghost_text = false,
   },
-  -- Lspkind(アイコン)を設定
+  -- icon setting for lspkind
   formatting = {
     format = lspkind.cmp_format({
       mode = "symbol",
@@ -84,7 +102,7 @@ cmp.setup({
 cmp.setup.cmdline("/", {
   mapping = cmp.mapping.preset.cmdline(),
   sources = {
-    { name = "buffer" }, --ソース類を設定
+    { name = "buffer" },
   },
 })
 cmp.setup.cmdline(":", {
