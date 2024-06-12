@@ -82,27 +82,7 @@ require("mason-lspconfig").setup_handlers({
     })
   end,
   ["tsserver"] = function()
-    lspconfig.tsserver.setup({
-      init_options = {
-        plugins = {
-          {
-            name = "@vue/typescript-plugin",
-            location = vim.fn.stdpath("data")
-              .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
-            languages = { "javascript", "typescript", "vue" },
-          },
-        },
-      },
-      filetypes = {
-        "javascript",
-        "typescript",
-        "vue",
-      },
-      on_attach = function(client, bufnr)
-        client.server_capabilities.documentFormattingProvider = false
-        client.server_capabilities.documentRangeFormattingProvider = false
-      end,
-    })
+    return true
   end,
   ["volar"] = function()
     local util = require("lspconfig.util")
@@ -164,12 +144,36 @@ require("mason-lspconfig").setup_handlers({
   end,
 })
 
-vim.api.nvim_create_autocmd({"FileType"}, {
-  group = vim.api.nvim_create_augroup("MyJdtls", {clear = true}),
-  pattern = {"java"},
-  callback = function (ev)
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  group = vim.api.nvim_create_augroup("MyJdtls", { clear = true }),
+  pattern = { "java" },
+  callback = function(ev)
     require("jdtls.jdtls_setup").setup()
-  end
+  end,
+})
+-- typescript-tools setup
+require("typescript-tools").setup({
+    init_options = {
+      plugins = {
+        {
+          name = "@vue/typescript-plugin",
+          location = vim.fn.stdpath("data")
+            .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
+          languages = { "javascript", "typescript", "vue" },
+        },
+      },
+    },
+    filetypes = {
+      "javascript",
+      "typescript",
+      "javascriptreact",
+      "typescriptreact",
+      "vue",
+    },
+    on_attach = function(client, bufnr)
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+    end,
 })
 
 local null_ls = require("null-ls")
@@ -208,12 +212,12 @@ require("mason-null-ls").setup({
     -- end,
   },
 })
-local lsp_format = function (bufnr)
+local lsp_format = function(bufnr)
   vim.lsp.buf.format({
-    filter = function (client)
+    filter = function(client)
       return client.name == "null-ls"
     end,
-    bufnr = bufnr
+    bufnr = bufnr,
   })
 end
 null_ls.setup({

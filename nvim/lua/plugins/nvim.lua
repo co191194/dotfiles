@@ -20,14 +20,14 @@ return {
       "nvim-telescope/telescope-file-browser.nvim",
     },
     config = function()
-      require("configs/telescope")
+      require("configs.telescope")
     end,
   },
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = function()
-      require("configs/nvim-treesitter")
+      require("configs.nvim-treesitter")
     end,
   },
   "vim-scripts/ScrollColors",
@@ -37,7 +37,7 @@ return {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      require("configs/lualine")
+      require("configs.lualine")
     end,
   },
   {
@@ -54,7 +54,7 @@ return {
     lazy = true,
     priority = 1000,
     config = function()
-      require("configs/vscode-nvim")
+      require("configs.vscode-nvim")
     end,
   },
   "williamboman/mason.nvim",
@@ -115,14 +115,17 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      require("configs/nvim-lspconfig")
-      require("configs/nvim-cmp")
+      require("configs.nvim-lspconfig")
+      require("configs.nvim-cmp")
     end,
+    dependencies = {
+      "pmizio/typescript-tools.nvim",
+    }
   },
   {
     "lewis6991/gitsigns.nvim",
     config = function()
-      require("configs/gitsigns")
+      require("configs.gitsigns")
     end,
   },
   {
