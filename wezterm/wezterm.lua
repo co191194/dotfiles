@@ -2,7 +2,7 @@
 require("format")
 -- status settings
 require("status")
-require("event")
+-- require("event")
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 
@@ -21,14 +21,13 @@ elseif host_env == "Darwin" then
 end
 
 config.font_size = 14.0
--- config.font = wezterm.font({ family = "HackGen Console NF", weight = "Regular" })
 config.font = wezterm.font_with_fallback({
-	{ family = "HackGen Console NF", weight = "Regular", assume_emoji_presentation = false },
-	{ family = "HackGen Console NF", weight = "Regular", assume_emoji_presentation = true },
+  "Hack Nerd Font",
+  "源柔ゴシック等幅",
 })
 
 config.window_frame = {
-	font = wezterm.font({ family = "HackGen Console NF", weight = "Bold" }),
+	font = wezterm.font({ family = "Hack Nerd Font", weight = "Bold" }),
 	font_size = 12.0,
 }
 
@@ -40,12 +39,10 @@ config.key_tables = keybinds.key_tables
 
 config.status_update_interval = 1000
 
-config.window_decorations = "RESIZE"
+config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 
 local mousebinds = require("mousebinds")
 config.disable_default_mouse_bindings = false
 config.mouse_bindings = mousebinds.mouse_bindings
-
--- config.default_domain = "WSL:Ubuntu-22.04"
 
 return config
