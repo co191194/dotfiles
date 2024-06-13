@@ -20,7 +20,7 @@ elseif host_env == "Linux" then
 elseif host_env == "Darwin" then
 end
 
-config.font_size = 14.0
+config.font_size = 12.0
 config.font = wezterm.font_with_fallback({
   "Hack Nerd Font",
   "源柔ゴシック等幅",
