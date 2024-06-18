@@ -47,7 +47,19 @@ return {
       require("configs.toggleterm")
     end,
   },
-  "rust-lang/rust.vim",
+  -- "rust-lang/rust.vim",
+  {
+    "mrcjkb/rustaceanvim",
+    version = "^4", -- Recommended
+    lazy = false, -- This plugin is already lazy
+  },
+  {
+    "saecki/crates.nvim",
+    tag = "stable",
+    config = function()
+      require("configs.crates")
+    end,
+  },
   "EdenEast/nightfox.nvim",
   {
     "Mofiqul/vscode.nvim",
@@ -120,7 +132,7 @@ return {
     end,
     dependencies = {
       "pmizio/typescript-tools.nvim",
-    }
+    },
   },
   {
     "lewis6991/gitsigns.nvim",
@@ -242,4 +254,10 @@ return {
   --     require("configs.tabnine")
   --   end,
   -- },
+  {
+    "rmagatti/auto-session",
+    config = function()
+      require("configs.auto-session")
+    end,
+  },
 }

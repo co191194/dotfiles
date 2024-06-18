@@ -43,6 +43,7 @@ cmp.setup({
     { name = "luasnip" },
     { name = "buffer" },
     { name = "path" },
+    { name = "crates" },
   },
   mapping = cmp.mapping.preset.insert({
     ["<UP>"] = cmp.mapping.select_prev_item(),
@@ -56,7 +57,11 @@ cmp.setup({
     ["<C-y>"] = cmp.mapping.confirm({ select = true }),
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        cmp.select_next_item()
+        if #cmp.get_entries() == 1 then
+          cmp.confirm({ select = true })
+        else
+          cmp.select_next_item()
+        end
       elseif luasnip.expand_or_locally_jumpable() then
         luasnip.expand_or_jump()
       else

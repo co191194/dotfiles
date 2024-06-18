@@ -44,16 +44,37 @@ require("mason-lspconfig").setup_handlers({
   end,
   ["jdtls"] = function() end,
   ["rust_analyzer"] = function()
-    lspconfig.rust_analyzer.setup({
-      settings = {
-        ["rust-analyzer"] = {
-          diagnostic = { enable = false },
-          assist = { importGranularity = "module", importPrefix = "self" },
-          cargo = { allFeatures = true, loadOutDirsFromCheck = true },
-          procMacro = { enable = true },
-        },
-      },
-    })
+    -- local function lsp_format(bufnr)
+    --   vim.lsp.buf.format({
+    --     filter = function(client)
+    --       return client.name == "rust_analyzer"
+    --     end,
+    --     bufnr = bufnr,
+    --   })
+    -- end
+    -- lspconfig.rust_analyzer.setup({
+    --   settings = {
+    --     ["rust-analyzer"] = {
+    --       diagnostic = { enable = false },
+    --       assist = { importGranularity = "module", importPrefix = "self" },
+    --       cargo = { allFeatures = true, loadOutDirsFromCheck = true },
+    --       procMacro = { enable = true },
+    --     },
+    --   },
+    --   on_attach = function(client, bufnr)
+    --     if client.supports_method("textDocument/formatting") then
+    --       vim.keymap.set("n", "<space>f", function()
+    --         lsp_format(bufnr)
+    --       end, { buffer = bufnr, desc = "lsp: Format" })
+    --     end
+    --     if client.supports_method("textDocument/rangeFormatting") then
+    --       vim.keymap.set("x", "<space>f", function()
+    --         lsp_format(bufnr)
+    --       end, { buffer = bufnr, desc = "lsp: Format" })
+    --     end
+    --   end,
+    -- })
+    return true
   end,
   ["pyright"] = function()
     require("lspconfig").pyright.setup({
@@ -153,27 +174,27 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 })
 -- typescript-tools setup
 require("typescript-tools").setup({
-    init_options = {
-      plugins = {
-        {
-          name = "@vue/typescript-plugin",
-          location = vim.fn.stdpath("data")
-            .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
-          languages = { "javascript", "typescript", "vue" },
-        },
+  init_options = {
+    plugins = {
+      {
+        name = "@vue/typescript-plugin",
+        location = vim.fn.stdpath("data")
+          .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
+        languages = { "javascript", "typescript", "vue" },
       },
     },
-    filetypes = {
-      "javascript",
-      "typescript",
-      "javascriptreact",
-      "typescriptreact",
-      "vue",
-    },
-    on_attach = function(client, bufnr)
-      client.server_capabilities.documentFormattingProvider = false
-      client.server_capabilities.documentRangeFormattingProvider = false
-    end,
+  },
+  filetypes = {
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact",
+    "vue",
+  },
+  on_attach = function(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
 })
 
 local null_ls = require("null-ls")
@@ -215,7 +236,7 @@ require("mason-null-ls").setup({
 local lsp_format = function(bufnr)
   vim.lsp.buf.format({
     filter = function(client)
-      return client.name == "null-ls"
+      return client.name == "null-ls" or "rust-analyzer"
     end,
     bufnr = bufnr,
   })
@@ -233,6 +254,7 @@ null_ls.setup({
       end, { buffer = bufnr, desc = "lsp: Format" })
     end
   end,
+  sources = {},
 })
 
 -- local prettier = require("prettier")
@@ -438,3 +460,28 @@ end
 map("n", "<space>d", function()
   dapui.toggle()
 end, dapui_opts("Toggle"))
+
+-- rustaceanvim
+vim.g.rustaceanvim = {
+  server = {
+    cmd = function()
+      local mason_registry = require("mason-registry")
+      local ra_bin = mason_registry.is_installed("rust-analyzer")
+          and mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer"
+        or "rust-analyzer"
+      return { ra_bin }
+    end,
+    on_attach = function(client, bufnr)
+      if client.supports_method("textDocument/formatting") then
+        vim.keymap.set("n", "<space>f", function()
+          lsp_format(bufnr)
+        end, { buffer = bufnr, desc = "lsp: Format" })
+      end
+      if client.supports_method("textDocument/rangeFormatting") then
+        vim.keymap.set("x", "<space>f", function()
+          lsp_format(bufnr)
+        end, { buffer = bufnr, desc = "lsp: Format" })
+      end
+    end,
+  },
+}
