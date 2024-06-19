@@ -467,7 +467,7 @@ vim.g.rustaceanvim = {
     cmd = function()
       local mason_registry = require("mason-registry")
       local ra_bin = mason_registry.is_installed("rust-analyzer")
-          and mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer"
+          and vim.fn.stdpath("data") .. "/mason/bin/rust-analyzer"
         or "rust-analyzer"
       return { ra_bin }
     end,
