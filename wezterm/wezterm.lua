@@ -45,4 +45,7 @@ local mousebinds = require("mousebinds")
 config.disable_default_mouse_bindings = false
 config.mouse_bindings = mousebinds.mouse_bindings
 
+-- config.ssh_domains = require("ssh")
+config.ssh_domains = wezterm.default_ssh_domains()
+
 return config
