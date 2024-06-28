@@ -62,24 +62,6 @@ else
   set("pumblend", 20, {})
   set("termguicolors", true, {})
 
-  local function setIndent(filetype, tabstop, shiftwidth, expandtab)
-    autocmd("FileType", {
-      pattern = filetype,
-      callback = function()
-        set("tabstop", tabstop, {})
-        set("shiftwidth", shiftwidth, {})
-        set("expandtab", expandtab, {})
-      end,
-    })
-  end
-
-  setIndent("html", 2, 0, true)
-  setIndent("css", 2, 0, true)
-  setIndent("javascript", 4, 0, false)
-  setIndent("java", 4, 0, false)
-  setIndent("lua", 2, 0, true)
-  setIndent("python", 4, 0, true)
-
   local term = augroup("my_term", {})
   autocmd({ "TermOpen" }, { group = term, command = "startinsert" })
   autocmd({ "TermEnter" }, { group = term, command = "startinsert" })
