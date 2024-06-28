@@ -25,7 +25,7 @@ require("mason-lspconfig").setup_handlers({
   -- default handler (optional)
   function(server_name)
     lspconfig[server_name].setup({
-      capabilities = capabilities, --cmpを連携
+      capabilities = capabilities,
     })
   end,
   ["lua_ls"] = function()
@@ -43,39 +43,7 @@ require("mason-lspconfig").setup_handlers({
     })
   end,
   ["jdtls"] = function() end,
-  ["rust_analyzer"] = function()
-    -- local function lsp_format(bufnr)
-    --   vim.lsp.buf.format({
-    --     filter = function(client)
-    --       return client.name == "rust_analyzer"
-    --     end,
-    --     bufnr = bufnr,
-    --   })
-    -- end
-    -- lspconfig.rust_analyzer.setup({
-    --   settings = {
-    --     ["rust-analyzer"] = {
-    --       diagnostic = { enable = false },
-    --       assist = { importGranularity = "module", importPrefix = "self" },
-    --       cargo = { allFeatures = true, loadOutDirsFromCheck = true },
-    --       procMacro = { enable = true },
-    --     },
-    --   },
-    --   on_attach = function(client, bufnr)
-    --     if client.supports_method("textDocument/formatting") then
-    --       vim.keymap.set("n", "<space>f", function()
-    --         lsp_format(bufnr)
-    --       end, { buffer = bufnr, desc = "lsp: Format" })
-    --     end
-    --     if client.supports_method("textDocument/rangeFormatting") then
-    --       vim.keymap.set("x", "<space>f", function()
-    --         lsp_format(bufnr)
-    --       end, { buffer = bufnr, desc = "lsp: Format" })
-    --     end
-    --   end,
-    -- })
-    return true
-  end,
+  ["rust_analyzer"] = function() end,
   ["pyright"] = function()
     require("lspconfig").pyright.setup({
       settings = {
