@@ -13,7 +13,7 @@ return {
   {
     "terrortylor/nvim-comment",
     config = function()
-      require("nvim_comment").setup()
+      require("configs.nvim-comment")
     end,
   },
   {
@@ -36,4 +36,10 @@ return {
     },
   },
   "haya14busa/vim-asterisk",
+  {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    config = function ()
+      require("configs.nvim-ts-context-commentstring")
+    end
+  },
 }
