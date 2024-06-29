@@ -105,6 +105,7 @@ return {
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
       "onsails/lspkind.nvim",
+      "hrsh7th/cmp-nvim-lsp-signature-help",
     },
   },
   { "mfussenegger/nvim-jdtls" },
@@ -127,8 +128,8 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      require("configs.nvim-lspconfig")
       require("configs.nvim-cmp")
+      require("configs.nvim-lspconfig")
     end,
     dependencies = {
       "pmizio/typescript-tools.nvim",

@@ -2,12 +2,6 @@ local lspkind = require("lspkind")
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 
-local has_words_before = function()
-  unpack = unpack or table.unpack
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
 local toggle_complete = function(_)
   if cmp.visible() then
     cmp.abort()
@@ -38,17 +32,23 @@ cmp.setup({
       luasnip.lsp_expand(args.body)
     end,
   },
-  sources = {
+  sources = cmp.config.sources({
     { name = "nvim_lsp" },
+  }, {
     { name = "luasnip" },
+  }, {
     { name = "buffer" },
+  }, {
     { name = "path" },
+  }, {
     { name = "crates" },
-  },
+  }, {
+    { name = "nvim_lsp_signature_help" },
+  }),
   mapping = cmp.mapping.preset.insert({
     ["<UP>"] = cmp.mapping.select_prev_item(),
     ["<DOWN>"] = cmp.mapping.select_next_item(),
-    ["<C-space>"] = cmp.mapping.complete(),
+    ["<C-space>"] = cmp.mapping(toggle_complete, { "i" }),
     -- ["<C-l>"] = cmp.mapping.complete(),
     ["<C-l>"] = cmp.mapping(toggle_complete, { "i" }),
     -- ["<C-e>"] = cmp.mapping.abort(),
@@ -79,8 +79,12 @@ cmp.setup({
     end, { "i", "s" }),
     ["<CR>"] = cmp.mapping({
       i = function(fallback)
-        if cmp.visible() and cmp.get_active_entry() then
-          cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+        if cmp.visible() then
+          if luasnip.expandable() then
+            luasnip.expand()
+          else
+            cmp.confirm({ select = true })
+          end
         else
           fallback()
         end
@@ -106,9 +110,9 @@ cmp.setup({
 
 cmp.setup.cmdline("/", {
   mapping = cmp.mapping.preset.cmdline(),
-  sources = {
+  sources = cmp.config.sources({
     { name = "buffer" },
-  },
+  }),
 })
 cmp.setup.cmdline(":", {
   mapping = cmp.mapping.preset.cmdline(),
