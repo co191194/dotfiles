@@ -70,14 +70,12 @@ require("mason-lspconfig").setup_handlers({
       },
     })
   end,
-  ["tsserver"] = function()
-    return true
-  end,
+  ["tsserver"] = function() end,
   ["volar"] = function()
     local util = require("lspconfig.util")
     local function get_ts_server_path(root_dir)
-      local global_ts = vim.fn.stdpath("data")
-        .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
+      local global_ts = require("mason-registry").get_package("vue-language-server"):get_install_path()
+        .. "/node_modules/typescript/lib"
       local local_ts = ""
       local function check_dir(path)
         local_ts = util.path.join(path, "node_modules", "typescript", "lib")
@@ -146,8 +144,8 @@ require("typescript-tools").setup({
     plugins = {
       {
         name = "@vue/typescript-plugin",
-        location = vim.fn.stdpath("data")
-          .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
+        location = require("mason-registry").get_package("vue-language-server"):get_install_path()
+          .. "/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
         languages = { "javascript", "typescript", "vue" },
       },
     },
@@ -257,28 +255,6 @@ null_ls.setup({
 --     timeout = 5000,
 --   },
 -- })
-
-require("lspsaga").setup({
-  lightbulb = {
-    virtual_text = false,
-  },
-  finder = {
-    max_height = 0.6,
-    default = "tyd+ref+imp+def",
-    keys = {
-      toggle_or_open = "<CR>",
-      vsplit = "v",
-      split = "s",
-      tabnew = "t",
-      tab = "T",
-      quit = "q",
-      close = "<Esc>",
-    },
-    methods = {
-      tyd = "textDocument/typeDefinition",
-    },
-  },
-})
 
 local map = vim.keymap.set
 -- Global mappings.
@@ -452,4 +428,5 @@ vim.g.rustaceanvim = {
       end
     end,
   },
+  capabilities = capabilities,
 }

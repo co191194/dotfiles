@@ -136,6 +136,7 @@ return {
     "neovim/nvim-lspconfig",
     config = function()
       require("configs.nvim-cmp")
+      require("configs.lspsaga")
       require("configs.nvim-lspconfig")
     end,
     dependencies = {
