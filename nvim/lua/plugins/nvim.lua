@@ -34,6 +34,13 @@ return {
   "sainnhe/everforest",
   "tomasiser/vim-code-dark",
   {
+    "chrisgrieser/nvim-recorder",
+    dependencies = "rcarriga/nvim-notify", -- optional
+    config = function ()
+      require("configs.nvim-recorder")
+    end
+  },
+  {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()

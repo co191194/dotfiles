@@ -4,6 +4,7 @@ local lazystatus = {
   cond = lazy.has_updates,
   color = { fg = "#ff9e64" },
 }
+local recorder = require("recorder")
 require("lualine").setup({
   options = {
     icons_enabled = true,
@@ -26,7 +27,7 @@ require("lualine").setup({
   sections = {
     lualine_a = { "mode" },
     lualine_b = { "branch", "diff", "diagnostics" },
-    lualine_c = { "filename" },
+    lualine_c = { "filename", recorder.displaySlots, recorder.recordingStatus},
     lualine_x = { lazystatus, "encoding", "fileformat", "filetype" },
     lualine_y = { "progress" },
     lualine_z = { "location" },

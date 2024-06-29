@@ -1,0 +1,30 @@
+require("recorder").setup({
+  slots = { "a", "b" },
+  mapping = {
+    startStopRecording = "q",
+    playMacro = "Q",
+    switchSlot = "<C-q>",
+    editMacro = "cq",
+    deleteAllMacros = "dq",
+    yankMacro = "yq",
+    addBreakPoint = "##",
+  },
+  clear = false,
+  logLevel = vim.log.levels.INFO,
+  lessNotifications = false,
+  useNerdfontIcons = true,
+  performanceOpts = {
+    countThreshold = 100,
+    lazyredraw = true,
+    noSystemClipboard = true,
+    autocmdEventsIgnore = {
+      "TextChangedI",
+      "TextChanged",
+      "InsertLeave",
+      "InsertEnter",
+      "InsertCharPre",
+    },
+  },
+  dapSharedKeymaps = false,
+  timeout = 1000,
+})
