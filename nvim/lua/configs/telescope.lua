@@ -66,52 +66,33 @@ telescope.load_extension("fzf")
 telescope.load_extension("file_browser")
 
 -- telescopeのキーマップ
-local keyset = vim.keymap.set
 local builtin = require("telescope.builtin")
--- ファイル検索
-keyset("n", "<leader>ff", builtin.find_files, {})
--- ドットファイルを検索対象にするファイル検索
-keyset("n", "<leader>fF", ":Telescope find_files hidden=true<CR>", {})
-
--- テキスト検索
-keyset("n", "<leader>/", builtin.live_grep, {})
-
--- gitの操作（git status）
-keyset("n", "<leader>gs", builtin.git_status, {})
-
--- gitの操作（git log）
-keyset("n", "<leader>gl", builtin.git_commits, {})
-
--- バッファの操作
-keyset("n", "<leader><space>", builtin.buffers, {})
-
--- 履歴の操作
-keyset("n", "<leader>fo", builtin.oldfiles, {})
-
--- nvim設定ファイルへのアクセス
-keyset("n", "<leader>fN", ":Telescope find_files cwd=~/.config/nvim<CR>", {})
-
--- カラーテーマの一覧
-keyset("n", "<leader>fc", builtin.colorscheme, {})
-
--- vim_optionsの一覧
-keyset("n", "<leader>fv", builtin.vim_options, {})
-
--- keymapの一覧
-keyset("n", "<leader>fk", builtin.keymaps, {})
-
--- registerの一覧
-keyset("n", "<leader>fr", builtin.registers, {})
-
-keyset("n", "<leader>fh", builtin.help_tags, {})
-keyset("n", "<leader>h", function()
-  builtin.help_tags(themes.get_ivy())
-end, {})
-
--- extensions file_browser keymaps
-local myTFB = vim.api.nvim_create_augroup("my_telescope_file_browswe", {})
-
-keyset("n", "<leader>fb", ":Telescope file_browser<CR>", {})
-
--- open file_browser with the path of the current buffer
-keyset("n", "<leader>fB", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", { noremap = true })
+local wk = require("which-key")
+wk.register({
+  ["<leader>"] = {
+    f = {
+      name = "Telescope Find",
+      f = { builtin.find_files, "Find File" },
+      F = { ":Telescope find_files hidden=true<CR>", "Find File(Include Hidden Files)" },
+      o = { builtin.oldfiles, "Find Old File" },
+      N = { ":Telescope find_files cwd=~/.config/nvim<CR>", "Find Nvim Setting File" },
+      c = { builtin.colorscheme, "Find Color Scheme" },
+      v = { builtin.vim_options, "Find Vim Option" },
+      k = { builtin.keymaps, "Find Keymap" },
+      r = { builtin.registers, "Find Register" },
+      h = { builtin.help_tags, "Find Help" },
+      b = { ":Telescope file_browser<CR>", "Open File Browser" },
+      B = {
+        ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
+        "Open File Browser With Current Buffer",
+      },
+    },
+    g = {
+      name = "Telescope Git",
+      s = { builtin.git_status, "Git Status" },
+      l = { builtin.git_commits, "Git Log" },
+    },
+    ["/"] = { builtin.live_grep, "Live Grep Text" },
+    ["<space>"] = { builtin.buffers, "Find Buffer" },
+  },
+})
