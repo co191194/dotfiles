@@ -36,9 +36,9 @@ return {
   {
     "chrisgrieser/nvim-recorder",
     dependencies = "rcarriga/nvim-notify", -- optional
-    config = function ()
+    config = function()
       require("configs.nvim-recorder")
-    end
+    end,
   },
   {
     "nvim-lualine/lualine.nvim",
@@ -133,6 +133,13 @@ return {
     },
   },
   {
+    "ray-x/lsp_signature.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("configs.lsp_signature")
+    end,
+  },
+  {
     "neovim/nvim-lspconfig",
     config = function()
       require("configs.nvim-cmp")
@@ -158,14 +165,6 @@ return {
       "kevinhwang91/nvim-hlslens",
       "lewis6991/gitsigns.nvim",
     },
-  },
-  {
-    "ray-x/lsp_signature.nvim",
-    event = "VeryLazy",
-    opts = {},
-    config = function(_, opts)
-      require("lsp_signature").setup(opts)
-    end,
   },
   {
     "SmiteshP/nvim-navic",
