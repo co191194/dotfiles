@@ -73,27 +73,27 @@ require("mason-lspconfig").setup_handlers({
   ["tsserver"] = function() end,
   ["volar"] = function()
     local util = require("lspconfig.util")
-    local function get_ts_server_path(root_dir)
-      local global_ts = require("mason-registry").get_package("vue-language-server"):get_install_path()
-        .. "/node_modules/typescript/lib"
-      local local_ts = ""
-      local function check_dir(path)
-        local_ts = util.path.join(path, "node_modules", "typescript", "lib")
-        if util.path.exists(local_ts) then
-          return path
-        end
-      end
-
-      if util.search_ancestors(root_dir, check_dir) then
-        return local_ts
-      else
-        return global_ts
-      end
-    end
+    -- local function get_ts_server_path(root_dir)
+    --   local global_ts = require("mason-registry").get_package("vue-language-server"):get_install_path()
+    --     .. "/node_modules/typescript/lib"
+    --   local local_ts = ""
+    --   local function check_dir(path)
+    --     local_ts = util.path.join(path, "node_modules", "typescript", "lib")
+    --     if util.path.exists(local_ts) then
+    --       return path
+    --     end
+    --   end
+    --
+    --   if util.search_ancestors(root_dir, check_dir) then
+    --     return local_ts
+    --   else
+    --     return global_ts
+    --   end
+    -- end
     lspconfig.volar.setup({
-      on_new_config = function(new_config, new_root_dir)
-        new_config.init_options.typescript.tsdk = get_ts_server_path(new_root_dir)
-      end,
+      -- on_new_config = function(new_config, new_root_dir)
+      --   new_config.init_options.typescript.tsdk = get_ts_server_path(new_root_dir)
+      -- end,
       filetypes = {
         "typescript",
         "javascript",
@@ -140,16 +140,18 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 })
 -- typescript-tools setup
 require("typescript-tools").setup({
-  init_options = {
-    plugins = {
-      {
-        name = "@vue/typescript-plugin",
-        location = require("mason-registry").get_package("vue-language-server"):get_install_path()
-          .. "/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
-        languages = { "javascript", "typescript", "vue" },
-      },
-    },
-  },
+  capabilities = capabilities,
+  -- single_file_support = false,
+  -- init_options = {
+  --   plugins = {
+  --     {
+  --       name = "@vue/typescript-plugin",
+  --       location = require("mason-registry").get_package("vue-language-server"):get_install_path()
+  --         .. "/node_modules/@vue/language-server",
+  --       languages = { "javascript", "typescript", "vue" },
+  --     },
+  --   },
+  -- },
   filetypes = {
     "javascript",
     "typescript",
@@ -161,6 +163,27 @@ require("typescript-tools").setup({
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
   end,
+  settings = {
+    separate_diagnostic_server = true,
+    publish_diagnostic_on = "insert_leave",
+    expose_as_code_action = {},
+    tsserver_path = nil,
+    tsserver_plugins = {
+      "@vue/typescript-plugin"
+    },
+    tsserver_max_memory = "auto",
+    tsserver_format_options = {},
+    tsserver_file_preferences = {},
+    tsserver_locale = "en",
+    complete_function_calls = false,
+    include_completions_with_insert_text = true,
+    code_lens = "off",
+    disable_member_code_lens = true,
+    jsx_close_tag = {
+      enable = false,
+      filetypes = { "javascriptreact", "typescriptreact" },
+    },
+  },
 })
 
 local null_ls = require("null-ls")
