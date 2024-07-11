@@ -273,4 +273,11 @@ return {
       require("configs.barbar")
     end,
   },
+  {
+    "stevearc/oil.nvim",
+    dependencies = { "echasnovski/mini.icons" },
+    config = function()
+      require("configs.oil")
+    end,
+  },
 }
