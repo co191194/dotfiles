@@ -1,131 +1,107 @@
 local trouble = require("trouble")
 trouble.setup({
-  -- position of the list can be: bottom, top, left, right
-  position = "bottom",
-  -- height of the trouble list when position is top or bottom
-  height = 10,
-  -- width of the list when position is left or right
-  width = 50,
-  -- use devicons for filenames
-  icons = true,
-  -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
-  mode = "workspace_diagnostics",
-  -- nil (ALL) or vim.diagnostic.severity.ERROR | WARN | INFO | HINT
-  severity = nil,
-  -- icon used for open folds
-  fold_open = "",
-  -- icon used for closed folds
-  fold_closed = "",
-  -- group results by file
-  group = true,
-  -- add an extra new line on top of the list
-  padding = true,
-  -- cycle item list when reaching beginning or end of list
-  cycle_results = true,
-  -- key mappings for actions in the trouble list
-  action_keys = {
-    -- map to {} to remove a mapping, for example:
-    -- close = {},
-    -- close the list
-    close = "q",
-    -- cancel the preview and get back to your last window / buffer / cursor
-    cancel = "<esc>",
-    -- manually refresh
-    refresh = "r",
-    -- jump to the diagnostic or open / close folds
-    jump = { "<cr>", "<tab>", "<2-leftmouse>" },
-    -- open buffer in new split
-    open_split = { "<c-x>" },
-    -- open buffer in new vsplit
-    open_vsplit = { "<c-v>" },
-    -- open buffer in new tab
-    open_tab = { "<c-t>" },
-    -- jump to the diagnostic and close the list
-    jump_close = { "o" },
-    -- toggle between "workspace" and "document" diagnostics mode
-    toggle_mode = "m",
-    -- switch "diagnostics" severity filter level to HINT / INFO / WARN / ERROR
-    switch_severity = "s",
-    -- toggle auto_preview
-    toggle_preview = "P",
-    -- opens a small popup with the full multiline message
-    hover = "K",
-    -- preview the diagnostic location
-    preview = "p",
-    -- if present, open a URI with more information about the diagnostic error
-    open_code_href = "c",
-    -- close all folds
-    close_folds = { "zM", "zm" },
-    -- open all folds
-    open_folds = { "zR", "zr" },
-    -- toggle fold of current file
-    toggle_fold = { "zA", "za" },
-    -- previous item
-    previous = "k",
-    -- next item
-    next = "j",
-    -- help menu
-    help = "?",
+  modes = {
+    preview_float = {
+      mode = "diagnostics",
+      preview = {
+        type = "float",
+        relative = "editor",
+        border = "rounded",
+        title = "Preview",
+        title_pos = "center",
+        position = { 0, -2 },
+        size = { width = 0.3, height = 0.3 },
+        zindex = 200,
+      },
+    },
+    diagnostics_buffer = {
+      mode = "diagnostics", -- inherit from diagnostics mode
+      filter = { buf = 0 }, -- filter diagnostics to the current buffer
+    },
   },
-  -- render multi-line messages
-  multiline = true,
-  -- add an indent guide below the fold icons
-  indent_lines = true,
-  -- window configuration for floating windows. See |nvim_open_win()|.
-  win_config = { border = "single" },
-  -- automatically open the list when you have diagnostics
-  auto_open = false,
-  -- automatically close the list when you have no diagnostics
-  auto_close = false,
-  -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
-  auto_preview = true,
-  -- automatically fold a file trouble list at creation
-  auto_fold = false,
-  -- for the given modes, automatically jump if there is only a single result
-  auto_jump = { "lsp_definitions" },
-  -- for the given modes, include the declaration of the current symbol in the results
-  include_declaration = { "lsp_references", "lsp_implementations", "lsp_definitions" },
-  signs = {
-    -- icons / text used for a diagnostic
-    error = "",
-    warning = "",
-    hint = "",
-    information = "",
-    other = "",
-  },
-  -- enabling this will use the signs defined in your lsp client
-  use_diagnotic_signs = true,
 })
 
--- Lua
-vim.keymap.set("n", "<leader>xx", function()
-  trouble.toggle()
-end)
-vim.keymap.set("n", "<leader>xw", function()
-  trouble.toggle("workspace_diagnostics")
-end)
-vim.keymap.set("n", "<leader>xd", function()
-  trouble.toggle("document_diagnostics")
-end)
-vim.keymap.set("n", "<leader>xq", function()
-  trouble.toggle("quickfix")
-end)
-vim.keymap.set("n", "<leader>xl", function()
-  trouble.toggle("loclist")
-end)
-vim.keymap.set("n", "gR", function()
-  trouble.toggle("lsp_references")
-end)
+local wk = require("which-key")
+local opts = { mode = "diagnostics", skip_groups = true, jump = true }
 
-vim.keymap.set("n", "gn", function()
-  trouble.next({ skip_groups = true, jump = true })
-end)
-vim.keymap.set("n", "gp", function()
-  trouble.previous({ skip_groups = true, jump = true })
-end)
-vim.keymap.set("n", "gF", function()
-  trouble.first({ skip_groups = true, jump = true })
-end)
-vim.keymap.set("n", "gL", function()
-  trouble.last({ skip_groups = true, jump = true })
-end)
+wk.register({
+  ["<leader>"] = {
+    x = {
+      name = "Trouble",
+      x = {
+        function()
+          trouble.toggle("diagnostics")
+        end,
+        "Toggle Trouble",
+      },
+      X = {
+        function()
+          trouble.toggle("diagnostics_buffer")
+        end,
+        "Toggle Trouble: Diagnostics Buffer",
+      },
+      w = {
+        function()
+          trouble.toggle("diagnostics")
+        end,
+        "Toggle Trouble: Workspace Diagnostics",
+      },
+      d = {
+        function()
+          trouble.toggle("document_diagnostics")
+        end,
+        "Toggle Trouble: Document Diagnostics",
+      },
+      q = {
+        function()
+          trouble.toggle("quickfix")
+        end,
+        "Toggle Trouble: QuickFix",
+      },
+      l = {
+        function()
+          trouble.toggle("loclist")
+        end,
+        "Toggle Trouble: loclist",
+      },
+      p = {
+        function()
+          trouble.toggle("preview_float")
+        end,
+        "Toggle Trouble: preview_float",
+      },
+    },
+  },
+  g = {
+    R = {
+      function()
+        trouble.toggle("lsp_references")
+      end,
+      "Toggle Trouble: LSP References",
+    },
+    n = {
+      function()
+        trouble.next(opts)
+      end,
+      "Next Trouble",
+    },
+    p = {
+      function()
+        trouble.prev(opts)
+      end,
+      "Prev Trouble",
+    },
+    F = {
+      function()
+        trouble.first(opts)
+      end,
+      "First Trouble",
+    },
+    L = {
+      function()
+        trouble.last(opts)
+      end,
+      "Last Trouble",
+    },
+  },
+})
