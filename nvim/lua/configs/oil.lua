@@ -17,6 +17,6 @@ require("oil").setup({
 
 local wk = require("which-key")
 
-wk.register({
-  ["-"] = { "<cmd>Oil<cr>", "Open parent directry" },
+wk.add({
+  { "-", "<cmd>Oil<cr>", desc = "Open parent directry" },
 })

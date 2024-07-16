@@ -24,84 +24,16 @@ trouble.setup({
 local wk = require("which-key")
 local opts = { mode = "diagnostics", skip_groups = true, jump = true }
 
-wk.register({
-  ["<leader>"] = {
-    x = {
-      name = "Trouble",
-      x = {
-        function()
-          trouble.toggle("diagnostics")
-        end,
-        "Toggle Trouble",
-      },
-      X = {
-        function()
-          trouble.toggle("diagnostics_buffer")
-        end,
-        "Toggle Trouble: Diagnostics Buffer",
-      },
-      w = {
-        function()
-          trouble.toggle("diagnostics")
-        end,
-        "Toggle Trouble: Workspace Diagnostics",
-      },
-      d = {
-        function()
-          trouble.toggle("document_diagnostics")
-        end,
-        "Toggle Trouble: Document Diagnostics",
-      },
-      q = {
-        function()
-          trouble.toggle("quickfix")
-        end,
-        "Toggle Trouble: QuickFix",
-      },
-      l = {
-        function()
-          trouble.toggle("loclist")
-        end,
-        "Toggle Trouble: loclist",
-      },
-      p = {
-        function()
-          trouble.toggle("preview_float")
-        end,
-        "Toggle Trouble: preview_float",
-      },
-    },
-  },
-  g = {
-    R = {
-      function()
-        trouble.toggle("lsp_references")
-      end,
-      "Toggle Trouble: LSP References",
-    },
-    n = {
-      function()
-        trouble.next(opts)
-      end,
-      "Next Trouble",
-    },
-    p = {
-      function()
-        trouble.prev(opts)
-      end,
-      "Prev Trouble",
-    },
-    F = {
-      function()
-        trouble.first(opts)
-      end,
-      "First Trouble",
-    },
-    L = {
-      function()
-        trouble.last(opts)
-      end,
-      "Last Trouble",
-    },
-  },
+wk.add({
+  { "<leader>x", group = "Trouble" },
+  { "<leader>xX", "<cmd>Trouble diagnostics_buffer toggle<cr>", desc = "Toggle Trouble: Diagnostics Buffer" },
+  { "<leader>xl", "<cmd>Trouble loclist toggle<cr>", desc = "Toggle Trouble: loclist" },
+  { "<leader>xp", "<cmd>Trouble preview_float toggle<cr>", desc = "Toggle Trouble: preview_float" },
+  { "<leader>xq", "<cmd>Trouble quickfix toggle<cr>", desc = "Toggle Trouble: QuickFix" },
+  { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Toggle Trouble" },
+  { "gF", "<cmd>Trouble diagnostics first<cr>", desc = "First Trouble" },
+  { "gL", "<cmd>Trouble diagnostics last<cr>", desc = "Last Trouble" },
+  { "gR", "<cmd>Trouble lsp_references toggle<cr>", desc = "Toggle Trouble: LSP References" },
+  { "gn", "<cmd>Trouble diagnostics next<cr>", desc = "Next Trouble" },
+  { "gp", "<cmd>Trouble diagnostics prev<cr>", desc = "Prev Trouble" },
 })

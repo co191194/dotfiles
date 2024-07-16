@@ -66,33 +66,35 @@ telescope.load_extension("fzf")
 telescope.load_extension("file_browser")
 
 -- telescopeのキーマップ
-local builtin = require("telescope.builtin")
 local wk = require("which-key")
-wk.register({
-  ["<leader>"] = {
-    f = {
-      name = "Telescope Find",
-      f = { builtin.find_files, "Find File" },
-      F = { ":Telescope find_files hidden=true<CR>", "Find File(Include Hidden Files)" },
-      o = { builtin.oldfiles, "Find Old File" },
-      N = { ":Telescope find_files cwd=~/.config/nvim<CR>", "Find Nvim Setting File" },
-      c = { builtin.colorscheme, "Find Color Scheme" },
-      v = { builtin.vim_options, "Find Vim Option" },
-      k = { builtin.keymaps, "Find Keymap" },
-      r = { builtin.registers, "Find Register" },
-      h = { builtin.help_tags, "Find Help" },
-      b = { ":Telescope file_browser<CR>", "Open File Browser" },
-      B = {
-        ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
-        "Open File Browser With Current Buffer",
-      },
-    },
-    g = {
-      name = "Telescope Git",
-      s = { builtin.git_status, "Git Status" },
-      l = { builtin.git_commits, "Git Log" },
-    },
-    ["/"] = { builtin.live_grep, "Live Grep Text" },
-    ["<space>"] = { builtin.buffers, "Find Buffer" },
+wk.add({
+  { "<leader>/", ":Telescope live_grep<cr>", desc = "Live Grep Text" },
+  { "<leader><space>", ":Telescope buffers<cr>", desc = "Find Buffer" },
+  { "<leader>f", group = "Telescope Find" },
+  {
+    "<leader>fB",
+    ":Telescope file_browser path=%:p:help select_buffer=true<CR>",
+    desc = "Open File Browser With Current Buffer",
   },
+  {
+    "<leader>fF",
+    ":Telescope find_files hidden=true<CR>",
+    desc = "Find File(Include Hidden Files)",
+  },
+  {
+    "<leader>fN",
+    ":Telescope find_files cwd=~/.config/nvim<CR>",
+    desc = "Find Nvim Setting File",
+  },
+  { "<leader>fb", ":Telescope file_browser<CR>", desc = "Open File Browser" },
+  { "<leader>fc", ":Telescope colorscheme<cr>", desc = "Find Color Scheme" },
+  { "<leader>ff", ":Telescope find_files<cr>", desc = "Find File" },
+  { "<leader>fh", ":Telescope help_tags<cr>", desc = "Find Help" },
+  { "<leader>fk", ":Telescope keymaps<cr>", desc = "Find Keymap" },
+  { "<leader>fo", ":Telescope oldfiles<cr>", desc = "Find Old File" },
+  { "<leader>fr", ":Telescope registers<cr>", desc = "Find Register" },
+  { "<leader>fv", ":Telescope vim_options<cr>", desc = "Find Vim Option" },
+  { "<leader>g", group = "Telescope Git" },
+  { "<leader>gl", ":Telescope git_status<cr>", desc = "Git Log" },
+  { "<leader>gs", ":Telescope git_commits<cr>", desc = "Git Status" },
 })

@@ -105,11 +105,9 @@ require("gitsigns").setup({
     map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", opts2("select_hunk"))
 
     local wk = require("which-key")
-    wk.register({
-      ["<leader>"] = {
-        h = { name = "Gitsigns" },
-        t = { name = "Gitsigns Toggle" },
-      },
-    }, { mode = { "n", "v" } })
+    wk.add({
+      { "<leader>h", group = "Gitsigns", mode = { "n", "v" } },
+      { "<leader>t", group = "Gitsigns Toggle", mode = { "n", "v" } },
+    })
   end,
 })
