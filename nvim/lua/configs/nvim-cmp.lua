@@ -34,16 +34,11 @@ cmp.setup({
   },
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
-  }, {
+    { name = "nvim_lsp_signature_help" },
     { name = "luasnip" },
   }, {
-    { name = "buffer" },
-  }, {
-    { name = "path" },
-  }, {
     { name = "crates" },
-  }, {
-    { name = "nvim_lsp_signature_help" },
+    { name = "buffer" },
   }),
   mapping = cmp.mapping.preset.insert({
     ["<UP>"] = cmp.mapping.select_prev_item(),
