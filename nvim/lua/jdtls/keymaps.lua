@@ -15,47 +15,66 @@ if not status_ok then
   return
 end
 
-local opts = {
-  mode = "n",     -- NORMAL mode
-  prefix = "<leader>",
-  buffer = nil,   -- Global mappings. Specify a buffer number for buffer local mappings
-  silent = true,  -- use `silent` when creating keymaps
-  noremap = true, -- use `noremap` when creating keymaps
-  nowait = true,  -- use `nowait` when creating keymaps
-}
+local prefix = "<space>J"
 
-local vopts = {
-  mode = "v",     -- VISUAL mode
-  prefix = "<leader>",
-  buffer = nil,   -- Global mappings. Specify a buffer number for buffer local mappings
-  silent = true,  -- use `silent` when creating keymaps
-  noremap = true, -- use `noremap` when creating keymaps
-  nowait = true,  -- use `nowait` when creating keymaps
-}
+---generate normal mode mapping by which_key
+---@param lsh string
+---@param rsh string | function
+---@param desc string
+---@return table
+local function gen_mapping(lsh, rsh, desc)
+  return {
+    prefix .. lsh,
+    rsh,
+    mode = "n",
+    desc = desc,
+    buffer = nil,
+    silent = true,
+    noremap = true,
+    nowait = true,
+  }
+end
+
+---generate visual mode mapping by which_key
+---@param lsh string
+---@param rsh string | function
+---@param desc string
+---@return table
+local function gen_vmapping(lsh, rsh, desc)
+  return {
+    prefix .. lsh,
+    rsh,
+    mode = "v",
+    desc = desc,
+    buffer = nil,
+    silent = true,
+    noremap = true,
+    nowait = true,
+  }
+end
+
+local jdtls = require("jdtls")
 
 local mappings = {
-  J = {
-    name = "Java",
-    o = { "<Cmd>lua require'jdtls'.organize_imports()<CR>", "Organize Imports" },
-    v = { "<Cmd>lua require('jdtls').extract_variable()<CR>", "Extract Variable" },
-    c = { "<Cmd>lua require('jdtls').extract_constant()<CR>", "Extract Constant" },
-    t = { "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", "Test Method" },
-    T = { "<Cmd>lua require'jdtls'.test_class()<CR>", "Test Class" },
-    u = { "<Cmd>JdtUpdateConfig<CR>", "Update Config" },
-  },
+  { prefix, group = "Java" },
+  gen_mapping("o", jdtls.organize_imports, "Organize Imports"),
+  gen_mapping("v", jdtls.extract_variable, "Extract Variable"),
+  gen_mapping("c", jdtls.extract_constant, "Extract Constant"),
+  gen_mapping("t", jdtls.test_nearest_method, "Test Method"),
+  gen_mapping("T", jdtls.test_class, "Test Class"),
+  gen_mapping("u", jdtls.update_project_config, "Update Config"),
+  gen_vmapping("v", function()
+    jdtls.extract_variable({ visual = true })
+  end, "Extract Variable"),
+  gen_vmapping("c", function()
+    jdtls.extract_constant({ visual = true })
+  end, "Extract Constant"),
+  gen_vmapping("m", function()
+    jdtls.extract_method({ visual = true })
+  end, "Extract Method"),
 }
 
-local vmappings = {
-  J = {
-    name = "Java",
-    v = { "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", "Extract Variable" },
-    c = { "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", "Extract Constant" },
-    m = { "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", "Extract Method" },
-  },
-}
-
-which_key.register(mappings, opts)
-which_key.register(vmappings, vopts)
+which_key.add(mappings)
 
 -- If you want you can add here Old School Mappings. Me I setup Telescope, LSP and Lspsaga mapping somewhere else and I just reuse them
 
