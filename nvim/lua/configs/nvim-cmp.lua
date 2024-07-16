@@ -79,11 +79,11 @@ cmp.setup({
     end, { "i", "s" }),
     ["<CR>"] = cmp.mapping({
       i = function(fallback)
-        if cmp.visible() and cmp.get_selected_entry() then
+        if cmp.visible() and cmp.get_active_entry() then
           if luasnip.expandable() then
             luasnip.expand()
           else
-            cmp.confirm({ select = true })
+            cmp.confirm({ select = false })
           end
         else
           fallback()
