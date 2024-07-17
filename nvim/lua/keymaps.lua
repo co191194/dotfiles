@@ -52,4 +52,6 @@ else
     -- <C-g>u breaks current undo, please make your own choice
     map("i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
   end
+
+  map("i", "<LeftMouse>", "<cmd>stopinsert<cr><LeftMouse>", {})
 end
