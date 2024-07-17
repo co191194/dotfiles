@@ -116,7 +116,13 @@ return {
     },
   },
   { "mfussenegger/nvim-jdtls" },
-  { "folke/neodev.nvim", opts = {} },
+  {
+    "folke/lazydev.nvim",
+    ft = "lua",
+    config = function ()
+      require("configs.lazydev")
+    end
+  },
   {
     "nvimdev/lspsaga.nvim",
     dependencies = {
