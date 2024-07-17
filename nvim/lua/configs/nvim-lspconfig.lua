@@ -169,7 +169,7 @@ require("typescript-tools").setup({
     expose_as_code_action = {},
     tsserver_path = nil,
     tsserver_plugins = {
-      "@vue/typescript-plugin"
+      "@vue/typescript-plugin",
     },
     tsserver_max_memory = "auto",
     tsserver_format_options = {},
@@ -433,8 +433,9 @@ vim.g.rustaceanvim = {
   server = {
     cmd = function()
       local mason_registry = require("mason-registry")
-      local ra_bin = mason_registry.is_installed("rust-analyzer")
-          and vim.fn.stdpath("data") .. "/mason/bin/rust-analyzer"
+      local lsp_name = "rust-analyzer"
+      local ra_bin = mason_registry.is_installed(lsp_name)
+          and mason_registry.get_package(lsp_name):get_install_path() .. "/rust-analyzer"
         or "rust-analyzer"
       return { ra_bin }
     end,
