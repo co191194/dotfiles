@@ -427,14 +427,26 @@ map("n", "<space>d", function()
   dapui.toggle()
 end, dapui_opts("Toggle"))
 
+local mason_registry = require("mason-registry")
+---get binary path install by mason
+---@param lsp_name string
+---@param bin_name string
+---@return string
+local function get_mason_lsp_bin_path(lsp_name, bin_name)
+  local is_win32 = vim.fn.has("win32") == 1
+  if is_win32 then
+    return mason_registry.get_package(lsp_name):get_install_path() .. "/" .. bin_name
+  else
+    return vim.fn.stdpath("data") .. "/mason/bin/" .. bin_name
+  end
+end
+
 -- rustaceanvim
 vim.g.rustaceanvim = {
   server = {
     cmd = function()
-      local mason_registry = require("mason-registry")
       local lsp_name = "rust-analyzer"
-      local ra_bin = mason_registry.is_installed(lsp_name)
-          and mason_registry.get_package(lsp_name):get_install_path() .. "/rust-analyzer"
+      local ra_bin = mason_registry.is_installed(lsp_name) and get_mason_lsp_bin_path(lsp_name, lsp_name)
         or "rust-analyzer"
       return { ra_bin }
     end,
