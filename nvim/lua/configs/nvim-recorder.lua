@@ -7,7 +7,7 @@ require("recorder").setup({
     editMacro = "cq",
     deleteAllMacros = "dq",
     yankMacro = "yq",
-    addBreakPoint = "##",
+    addBreakPoint = "<space>#",
   },
   clear = false,
   logLevel = vim.log.levels.INFO,
