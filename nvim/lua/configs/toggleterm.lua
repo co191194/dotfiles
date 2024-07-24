@@ -1,5 +1,8 @@
 require("toggleterm").setup({
   open_mapping = { [[<c-\>]], [[<c-¥>]] },
+  on_open = function ()
+    vim.cmd("startinsert")
+  end
 })
 
 local Terminal = require("toggleterm.terminal").Terminal
