@@ -61,18 +61,19 @@ local on_attach = function(_, bufnr)
   -- require("lspsaga").init_lsp_saga()
 end
 
-local capabilities = {
-  workspace = {
-    configuration = true,
-  },
-  textDocument = {
-    completion = {
-      completionItem = {
-        snippetSupport = true,
-      },
-    },
-  },
-}
+-- local capabilities = {
+--   workspace = {
+--     configuration = true,
+--   },
+--   textDocument = {
+--     completion = {
+--       completionItem = {
+--         snippetSupport = true,
+--       },
+--     },
+--   },
+-- }
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 
