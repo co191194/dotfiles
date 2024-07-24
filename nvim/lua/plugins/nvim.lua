@@ -119,9 +119,9 @@ return {
   {
     "folke/lazydev.nvim",
     ft = "lua",
-    config = function ()
+    config = function()
       require("configs.lazydev")
-    end
+    end,
   },
   {
     "nvimdev/lspsaga.nvim",
@@ -284,6 +284,13 @@ return {
     dependencies = { "echasnovski/mini.icons" },
     config = function()
       require("configs.oil")
+    end,
+  },
+  {
+    "Wansmer/treesj",
+    dependencies = { "nvim-treesitter/nvim-treesitter" }, -- if you install parsers with `nvim-treesitter`
+    config = function()
+      require("configs.treesj")
     end,
   },
 }
