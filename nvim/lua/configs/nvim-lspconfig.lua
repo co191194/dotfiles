@@ -71,28 +71,7 @@ require("mason-lspconfig").setup_handlers({
   end,
   ["tsserver"] = function() end,
   ["volar"] = function()
-    local util = require("lspconfig.util")
-    -- local function get_ts_server_path(root_dir)
-    --   local global_ts = require("mason-registry").get_package("vue-language-server"):get_install_path()
-    --     .. "/node_modules/typescript/lib"
-    --   local local_ts = ""
-    --   local function check_dir(path)
-    --     local_ts = util.path.join(path, "node_modules", "typescript", "lib")
-    --     if util.path.exists(local_ts) then
-    --       return path
-    --     end
-    --   end
-    --
-    --   if util.search_ancestors(root_dir, check_dir) then
-    --     return local_ts
-    --   else
-    --     return global_ts
-    --   end
-    -- end
     lspconfig.volar.setup({
-      -- on_new_config = function(new_config, new_root_dir)
-      --   new_config.init_options.typescript.tsdk = get_ts_server_path(new_root_dir)
-      -- end,
       filetypes = {
         "typescript",
         "javascript",
@@ -140,17 +119,6 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 -- typescript-tools setup
 require("typescript-tools").setup({
   capabilities = capabilities,
-  -- single_file_support = false,
-  -- init_options = {
-  --   plugins = {
-  --     {
-  --       name = "@vue/typescript-plugin",
-  --       location = require("mason-registry").get_package("vue-language-server"):get_install_path()
-  --         .. "/node_modules/@vue/language-server",
-  --       languages = { "javascript", "typescript", "vue" },
-  --     },
-  --   },
-  -- },
   filetypes = {
     "javascript",
     "typescript",
@@ -279,13 +247,21 @@ null_ls.setup({
 -- })
 
 local map = vim.keymap.set
+local wk = require("which-key")
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-map("n", "<space>e", vim.diagnostic.open_float)
-map("n", "<space>q", vim.diagnostic.setloclist)
-map("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>")
-map("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>")
-map("n", "<space>,", "<cmd>Lspsaga finder<CR>", {})
+-- map("n", "<space>e", vim.diagnostic.open_float)
+-- map("n", "<space>q", vim.diagnostic.setloclist)
+-- map("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>")
+-- map("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>")
+-- map("n", "<space>,", "<cmd>Lspsaga finder<CR>", {})
+wk.add({
+  { "<space>e", vim.diagnostic.open_float, desc = "LSP: Open Float Diagnostic" },
+  { "<space>q", vim.diagnostic.setloclist, desc = "LSP: Set Loclist" },
+  { "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", desc = "LSP: Next Diagnostic" },
+  { "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", desc = "LSP: Prev Diagnostic" },
+  { "<space>,", "<cmd>Lspsaga finder<CR>", desc = "LSP: Open LspSaga Finder" },
+})
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
@@ -295,47 +271,33 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Enable completion triggered by <c-x><c-o>
     vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-    -- Buffer local mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    -- local opts = { buffer = ev.buf }
-    ---default opts func
-    ---@param desc string
-    ---@param options table
-    ---@return table
-    local function opts(desc, options)
-      local o = options
-      o.desc = "lsp: " .. desc
-      return o
-    end
-    local function opts1(desc)
-      return opts(desc, {})
-    end
-    local function opts2(desc)
-      return opts(desc, { buffer = ev.buf })
-    end
-
-    map("n", "gd", "<cmd>Lspsaga goto_definition<CR>", opts1("goto definition"))
-    map("n", "gD", "<cmd>Lspsaga peek_definition<CR>", opts1("peek definition"))
-    map("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts1("hover doc"))
-    map("n", "<C-m>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts1("signature help"))
-    map("n", "<space>rn", "<cmd>Lspsaga rename<CR>", opts1("rename"))
-    map({ "n", "v" }, "<space>ca", "<cmd>Lspsaga code_action<CR>", opts1("code action"))
-    map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts1("references"))
-    map("n", "ge", "<cmd>Lspsaga show_line_diagnostics<CR>", opts1("show line diagnostics"))
-    -- map("n", "<space>f", function()
-    --   vim.lsp.buf.format({
-    --     timeout_ms = 500,
-    --     async = true,
-    --     bufnr = vim.api.nvim_get_current_buf(),
-    --   })
-    -- end, opts2("format"))
-    map("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts2("add workspace folder"))
-    map("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts2("remove workspace folder"))
-    map("n", "<space>wl", function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts2("list workspace folders"))
-    map("n", "<space>D", vim.lsp.buf.type_definition, opts2("type type definition"))
-    map("n", "<space>o", "<cmd>Lspsaga outline<CR>", opts1("outline"))
+    wk.add({
+      { "gd", "<cmd>Lspsaga goto_definition<CR>", desc = "LSP: goto definition" },
+      { "gD", "<cmd>Lspsaga peek_definition<CR>", desc = "LSP: peek definition" },
+      { "K", "<cmd>Lspsaga hover_doc<CR>", desc = "LSP: hover doc" },
+      { "<C-m>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", desc = "LSP: signature help" },
+      { "<space>r", group = "LSP: rename" },
+      { "<space>rn", "<cmd>Lspsaga rename<CR>", desc = "LSP: rename" },
+      { "<space>c", group = "LSP: Code Action" },
+      { "<space>ca", "<cmd>Lspsaga code_action<CR>", desc = "LSP: code action", mode = "nv" },
+      { "gr", "<cmd>lua vim.lsp.buf.references()<CR>", desc = "LSP: references" },
+      { "ge", "<cmd>Lspsaga show_line_diagnostics<CR>", desc = "LSP: show line diagnostics" },
+      { "<space>o", "<cmd>Lspsaga outline<CR>", desc = "LSP: outline" },
+      {
+        buffer = ev.buf,
+        { "<space>w", group = "LSP: workspace" },
+        { "<space>wa", vim.lsp.buf.add_workspace_folder, desc = "LSP: add workspace folder" },
+        { "<space>wr", vim.lsp.buf.remove_workspace_folder, desc = "LSP: remove workspace folder" },
+        {
+          "<space>wl",
+          function()
+            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+          end,
+          desc = "LSP: list workspace folders",
+        },
+        { "<space>D", vim.lsp.buf.type_definition, desc = "LSP: type definition" },
+      },
+    })
   end,
 })
 
