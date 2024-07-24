@@ -15,7 +15,7 @@ if not status_ok then
   return
 end
 
-local prefix = "<space>J"
+local prefix = "<space>j"
 
 ---generate normal mode mapping by which_key
 ---@param lsh string
