@@ -1,12 +1,12 @@
 local map = vim.keymap.set
 
-map("n", "*", "<Plug>(asterisk-*)", { noremap = false })
-map("n", "#", "<Plug>(asterisk-#)", { noremap = false })
+map("n", "*", "<Plug>(asterisk-z*)", { noremap = false })
+map("n", "#", "<Plug>(asterisk-z#)", { noremap = false })
 map("n", "g*", "<Plug>(asterisk-g*)", { noremap = false })
 map("n", "g#", "<Plug>(asterisk-g#)", { noremap = false })
-map("n", "z*", "<Plug>(asterisk-z*)", { noremap = false })
+map("n", "z*", "<Plug>(asterisk-*)", { noremap = false })
 map("n", "gz*", "<Plug>(asterisk-gz*)", { noremap = false })
-map("n", "z#", "<Plug>(asterisk-z#)", { noremap = false })
+map("n", "z#", "<Plug>(asterisk-#)", { noremap = false })
 map("n", "gz#", "<Plug>(asterisk-gz#)", { noremap = false })
 
 if vim.g.vscode == 1 then
