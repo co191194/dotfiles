@@ -1,5 +1,7 @@
 local treesj = require("treesj")
-treesj.setup({})
+treesj.setup({
+  use_default_keymaps = false
+})
 
 local wk = require("which-key")
 wk.add({
