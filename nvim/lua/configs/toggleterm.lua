@@ -18,11 +18,3 @@ map({ "n", "t" }, "<M-d>", function()
   shell:toggle()
 end, opts)
 
-if vim.fn.executable("lazygit") == 1 then
-  local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
-
-  -- map({ "n", "t" }, "<M-g>", "<cmd>lua lazygit_toggle()<CR>", opts)
-  map({ "n", "t" }, "<M-g>", function()
-    lazygit:toggle()
-  end, opts)
-end
