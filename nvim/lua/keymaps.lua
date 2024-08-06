@@ -9,7 +9,34 @@ map("n", "gz*", "<Plug>(asterisk-gz*)", { noremap = false })
 map("n", "z#", "<Plug>(asterisk-#)", { noremap = false })
 map("n", "gz#", "<Plug>(asterisk-gz#)", { noremap = false })
 
-if vim.g.vscode == 1 then
+if require("utils").is_vscode() then
+  local vscode = require("vscode")
+  map("n", "<leader>ff", function()
+    vscode.action("workbench.action.quickOpen")
+  end)
+
+  map("n", "<space>bc", function()
+    vscode.action("workbench.action.closeActiveEditor")
+  end)
+
+  map("n", "<space>o", function()
+    vscode.action("workbench.action.gotoSymbol")
+  end)
+
+  map("n", "<leader>/", function()
+    vscode.action("workbench.action.quickTextSearch")
+  end)
+
+  map("n", "<space>f", function()
+    vscode.action("editor.action.formatDocument")
+  end)
+
+  map("n", "L", function()
+    vscode.action("workbench.action.nextEditor")
+  end)
+  map("n", "H", function()
+    vscode.action("workbench.action.previousEditor")
+  end)
 else
   -- insertモードの終了
   map("i", "jj", "<ESC>", { noremap = true, silent = true })

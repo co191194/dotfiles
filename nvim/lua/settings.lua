@@ -19,7 +19,8 @@ set("clipboard", "unnamedplus", {})
 
 -- vscode settings
 if vim.g.vscode == 1 then
-  return
+  local vscode = require("vscode")
+  vim.notify = vscode.notify
 else
   -- disable netrw at the very start of your init.lua
   g.loaded_netrw = 1
