@@ -37,6 +37,28 @@ if require("utils").is_vscode() then
   map("n", "H", function()
     vscode.action("workbench.action.previousEditor")
   end)
+
+  map("n", "<space>rn", function()
+    vscode.action("editor.action.rename")
+  end)
+
+  map("n", "gcc", function()
+    vscode.action("editor.action.commentLine")
+  end)
+
+  map("n", "gbc", function()
+    vscode.action("editor.action.blockComment")
+  end)
+
+  map("x", "gc", function()
+    vscode.call("editor.action.commentLine")
+    vscode.call("vscode-neovim.escape")
+  end)
+  map("x", "gb", function()
+    vscode.call("editor.action.blockComment")
+    vscode.call("vscode-neovim.escape")
+  end)
+
 else
   -- insertモードの終了
   map("i", "jj", "<ESC>", { noremap = true, silent = true })

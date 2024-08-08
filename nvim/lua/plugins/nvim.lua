@@ -312,4 +312,16 @@ return {
       { "<m-g>", "<cmd>LazyGit<cr>", desc = "LazyGit" },
     },
   },
+  {
+    "terrortylor/nvim-comment",
+    config = function()
+      require("configs.nvim-comment")
+    end,
+  },
+  {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    config = function()
+      require("configs.nvim-ts-context-commentstring")
+    end,
+  },
 }

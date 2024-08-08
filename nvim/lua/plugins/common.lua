@@ -11,12 +11,6 @@ return {
     config = true,
   },
   {
-    "terrortylor/nvim-comment",
-    config = function()
-      require("configs.nvim-comment")
-    end,
-  },
-  {
     "kevinhwang91/nvim-hlslens",
     config = true,
     keys = {
@@ -36,10 +30,4 @@ return {
     },
   },
   "haya14busa/vim-asterisk",
-  {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    config = function ()
-      require("configs.nvim-ts-context-commentstring")
-    end
-  },
 }
