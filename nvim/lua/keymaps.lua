@@ -31,32 +31,41 @@ if require("utils").is_vscode() then
     vscode.action("editor.action.formatDocument")
   end)
 
-  map("n", "L", function()
-    vscode.action("workbench.action.nextEditor")
-  end)
-  map("n", "H", function()
-    vscode.action("workbench.action.previousEditor")
-  end)
-
   map("n", "<space>rn", function()
     vscode.action("editor.action.rename")
   end)
 
+  -- toggle comment out for line
   map("n", "gcc", function()
     vscode.action("editor.action.commentLine")
   end)
 
+  -- toggle block comment out for line
   map("n", "gbc", function()
     vscode.action("editor.action.blockComment")
   end)
 
+  -- toggle comment out for selected range
   map("x", "gc", function()
     vscode.call("editor.action.commentLine")
     vscode.call("vscode-neovim.escape")
   end)
+
+  -- toggle block comment out for selected range
   map("x", "gb", function()
     vscode.call("editor.action.blockComment")
     vscode.call("vscode-neovim.escape")
+  end)
+
+  -- close all panel and bar
+  map("n", "<leader>z", function ()
+    vscode.action("workbench.action.closeAuxiliaryBar")
+    vscode.action("workbench.action.closePanel")
+    vscode.action("workbench.action.closeSidebar")
+  end)
+
+  map("n", "<leader>t", function ()
+    vscode.action("workbench.action.terminal.toggleTerminal")
   end)
 
 else
