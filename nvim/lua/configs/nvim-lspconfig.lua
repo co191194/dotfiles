@@ -13,7 +13,7 @@ require("mason-lspconfig").setup({
     "emmet_ls",
     "volar",
     "tailwindcss",
-    "tsserver",
+    "ts_ls",
     "cssls",
     "yamlls",
     "jsonls",
@@ -69,7 +69,7 @@ require("mason-lspconfig").setup_handlers({
       },
     })
   end,
-  ["tsserver"] = function() end,
+  ["ts_ls"] = function() end,
   ["volar"] = function()
     lspconfig.volar.setup({
       filetypes = {
@@ -134,14 +134,14 @@ require("typescript-tools").setup({
     separate_diagnostic_server = true,
     publish_diagnostic_on = "insert_leave",
     expose_as_code_action = {},
-    tsserver_path = nil,
-    tsserver_plugins = {
+    ts_ls_path = nil,
+    ts_ls_plugins = {
       "@vue/typescript-plugin",
     },
-    tsserver_max_memory = "auto",
-    tsserver_format_options = {},
-    tsserver_file_preferences = {},
-    tsserver_locale = "en",
+    ts_ls_max_memory = "auto",
+    ts_ls_format_options = {},
+    ts_ls_file_preferences = {},
+    ts_ls_locale = "en",
     complete_function_calls = false,
     include_completions_with_insert_text = true,
     code_lens = "off",
