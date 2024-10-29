@@ -66,4 +66,8 @@ else
   local term = augroup("my_term", {})
   autocmd({ "TermOpen" }, { group = term, command = "startinsert" })
   autocmd({ "TermEnter" }, { group = term, command = "startinsert" })
+
+  if vim.fn.executable('volta') == 1 then
+    g.node_host_prog = vim.fn.trim(vim.fn.system("volta which neovim-node-host"))
+  end
 end
