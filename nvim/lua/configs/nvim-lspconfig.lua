@@ -7,7 +7,7 @@ require("mason-lspconfig").setup({
     "pyright",
     "lua_ls",
     "jdtls",
-    "ruff_lsp",
+    "ruff",
     "rust_analyzer",
     "html",
     "emmet_ls",
@@ -59,17 +59,41 @@ require("mason-lspconfig").setup_handlers({
       },
     })
   end,
-  ["ruff_lsp"] = function()
-    lspconfig.ruff_lsp.setup({
-      init_options = {
-        settings = {
-          -- Any extra CLI arguments for `ruff` go here.
-          args = {},
-        },
-      },
-    })
-  end,
+  -- ["ruff_lsp"] = function()
+  --   lspconfig.ruff_lsp.setup({
+  --     init_options = {
+  --       settings = {
+  --         -- Any extra CLI arguments for `ruff` go here.
+  --         args = {},
+  --       },
+  --     },
+  --   })
+  -- end,
   ["ts_ls"] = function() end,
+  -- ["ts_ls"] = function()
+  --   local home = vim.fn.system({ "echo", "$HOME" })
+  --   lspconfig.ts_ls.setup({
+  --     init_options = {
+  --       plugins = {
+  --         {
+  --           name = "@vue/typescript-plugin",
+  --           location = home
+  --             .. ".volta/tools/image/packages/@vue/language-server/lib/node_modules/@vue/typescript-plugin",
+  --           languages = { "javascript", "typescript", "vue" },
+  --         },
+  --       },
+  --     },
+  --     filetypes = {
+  --       "javascript",
+  --       "javascriptreact",
+  --       "javascript.jsx",
+  --       "typescript",
+  --       "typescriptreact",
+  --       "typescript.tsx",
+  --       "vue",
+  --     },
+  --   })
+  -- end,
   ["volar"] = function()
     lspconfig.volar.setup({
       filetypes = {
