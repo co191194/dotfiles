@@ -67,7 +67,10 @@ else
   autocmd({ "TermOpen" }, { group = term, command = "startinsert" })
   autocmd({ "TermEnter" }, { group = term, command = "startinsert" })
 
-  if vim.fn.executable('volta') == 1 then
+  if vim.fn.executable("volta") == 1 then
     g.node_host_prog = vim.fn.trim(vim.fn.system("volta which neovim-node-host"))
   end
+
+  -- auto-session recomend setting
+  vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 end
