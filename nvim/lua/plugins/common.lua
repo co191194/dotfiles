@@ -5,10 +5,13 @@ return {
     event = "VeryLazy",
     config = true,
   },
-  "rhysd/clever-f.vim",
+  -- "rhysd/clever-f.vim",
   {
     "smoka7/hop.nvim",
-    config = true,
+    version = "v2",
+    config = function()
+      require("configs.hop")
+    end,
   },
   {
     "kevinhwang91/nvim-hlslens",
