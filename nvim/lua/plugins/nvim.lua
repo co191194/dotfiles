@@ -231,13 +231,6 @@ return {
     end,
   },
   {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("configs.which_key")
-    end,
-  },
-  {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
