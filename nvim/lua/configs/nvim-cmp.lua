@@ -107,6 +107,7 @@ cmp.setup({
       end
     }),
   },
+  preselect = 'None'
 })
 
 cmp.setup.cmdline("/", {

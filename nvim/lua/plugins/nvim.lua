@@ -57,7 +57,7 @@ return {
   -- "rust-lang/rust.vim",
   {
     "mrcjkb/rustaceanvim",
-    version = "^4", -- Recommended
+    version = "^5", -- Recommended
     lazy = false, -- This plugin is already lazy
   },
   {
@@ -335,8 +335,8 @@ return {
   },
   {
     "windwp/nvim-ts-autotag",
-    config = function ()
+    config = function()
       require("configs.nvim-ts-autotag")
-    end
-  }
+    end,
+  },
 }

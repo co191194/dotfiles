@@ -448,6 +448,6 @@ vim.g.rustaceanvim = {
         end, { buffer = bufnr, desc = "lsp: Format" })
       end
     end,
+    capabilities = capabilities
   },
-  capabilities = capabilities,
 }

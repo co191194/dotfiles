@@ -3,4 +3,9 @@ require("crates").setup({
     enabled = true,
     name = "crates.nvim",
   },
+  completion = {
+    cmp = {
+      enabled = true
+    }
+  }
 })
