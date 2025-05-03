@@ -1,0 +1,18 @@
+{
+  "paiza": {
+    "prefix": "paiza",
+    "body": [
+      "import java.util.*;",
+      "",
+      "",
+      "public class Main {",
+      "\tpublic static void main(String[] args) {",
+      "\t\tScanner sc = new Scanner(System.in);",
+      "",
+      "\t}",
+      "}"
+    ],
+    "description": "vue3 setup template"
+  }
+}
+

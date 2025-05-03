@@ -17,6 +17,7 @@ require("mason-lspconfig").setup({
     "cssls",
     "yamlls",
     "jsonls",
+    "gopls",
   },
 })
 local lspconfig = require("lspconfig")
@@ -41,7 +42,13 @@ require("mason-lspconfig").setup_handlers({
       },
     })
   end,
-  ["jdtls"] = function() end,
+  ["jdtls"] = function()
+    require("java").setup()
+    lspconfig.jdtls.setup({
+      on_attach = require("configs.nvim-java").on_attach
+    })
+    require("configs.nvim-java").keymap()
+  end,
   ["rust_analyzer"] = function() end,
   ["pyright"] = function()
     require("lspconfig").pyright.setup({
@@ -69,31 +76,31 @@ require("mason-lspconfig").setup_handlers({
   --     },
   --   })
   -- end,
-  ["ts_ls"] = function() end,
-  -- ["ts_ls"] = function()
-  --   local home = vim.fn.system({ "echo", "$HOME" })
-  --   lspconfig.ts_ls.setup({
-  --     init_options = {
-  --       plugins = {
-  --         {
-  --           name = "@vue/typescript-plugin",
-  --           location = home
-  --             .. ".volta/tools/image/packages/@vue/language-server/lib/node_modules/@vue/typescript-plugin",
-  --           languages = { "javascript", "typescript", "vue" },
-  --         },
-  --       },
-  --     },
-  --     filetypes = {
-  --       "javascript",
-  --       "javascriptreact",
-  --       "javascript.jsx",
-  --       "typescript",
-  --       "typescriptreact",
-  --       "typescript.tsx",
-  --       "vue",
-  --     },
-  --   })
-  -- end,
+  -- ["ts_ls"] = function() end,
+  ["ts_ls"] = function()
+    local home = vim.fn.expand("$HOME")
+    local vue_typescript_plugin = home
+      .. "/.volta/tools/image/packages/@vue/typescript-plugin/lib/node_modules/@vue/typescript-plugin"
+    print(vue_typescript_plugin)
+    lspconfig.ts_ls.setup({
+      init_options = {
+        plugins = {
+          {
+            name = "@vue/typescript-plugin",
+            location = vue_typescript_plugin,
+            languages = { "javascript", "typescript", "vue" },
+          },
+        },
+      },
+      filetypes = {
+        "typescript",
+        "javascript",
+        "typescriptreact",
+        "javascriptreact",
+        "vue",
+      },
+    })
+  end,
   ["volar"] = function()
     lspconfig.volar.setup({
       filetypes = {
@@ -131,51 +138,53 @@ require("mason-lspconfig").setup_handlers({
       },
     })
   end,
+  ["gopls"] = function() end,
 })
 
-vim.api.nvim_create_autocmd({ "FileType" }, {
-  group = vim.api.nvim_create_augroup("MyJdtls", { clear = true }),
-  pattern = { "java" },
-  callback = function(ev)
-    require("jdtls.jdtls_setup").setup()
-  end,
-})
+-- vim.api.nvim_create_autocmd({ "FileType" }, {
+--   group = vim.api.nvim_create_augroup("MyJdtls", { clear = true }),
+--   pattern = { "java" },
+--   callback = function(ev)
+--     require("jdtls.jdtls_setup").setup()
+--   end,
+-- })
+
 -- typescript-tools setup
-require("typescript-tools").setup({
-  capabilities = capabilities,
-  filetypes = {
-    "javascript",
-    "typescript",
-    "javascriptreact",
-    "typescriptreact",
-    "vue",
-  },
-  on_attach = function(client, bufnr)
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-  end,
-  settings = {
-    separate_diagnostic_server = true,
-    publish_diagnostic_on = "insert_leave",
-    expose_as_code_action = {},
-    ts_ls_path = nil,
-    ts_ls_plugins = {
-      "@vue/typescript-plugin",
-    },
-    ts_ls_max_memory = "auto",
-    ts_ls_format_options = {},
-    ts_ls_file_preferences = {},
-    ts_ls_locale = "en",
-    complete_function_calls = false,
-    include_completions_with_insert_text = true,
-    code_lens = "off",
-    disable_member_code_lens = true,
-    jsx_close_tag = {
-      enable = false,
-      filetypes = { "javascriptreact", "typescriptreact" },
-    },
-  },
-})
+-- require("typescript-tools").setup({
+--   capabilities = capabilities,
+--   filetypes = {
+--     "javascript",
+--     "typescript",
+--     "javascriptreact",
+--     "typescriptreact",
+--     -- "vue",
+--   },
+--   on_attach = function(client, bufnr)
+--     client.server_capabilities.documentFormattingProvider = false
+--     client.server_capabilities.documentRangeFormattingProvider = false
+--   end,
+--   settings = {
+--     separate_diagnostic_server = true,
+--     publish_diagnostic_on = "insert_leave",
+--     expose_as_code_action = {},
+--     ts_ls_path = nil,
+--     ts_ls_plugins = {
+--       "@vue/typescript-plugin",
+--     },
+--     ts_ls_max_memory = "auto",
+--     ts_ls_format_options = {},
+--     ts_ls_file_preferences = {},
+--     ts_ls_locale = "en",
+--     complete_function_calls = false,
+--     include_completions_with_insert_text = true,
+--     code_lens = "off",
+--     disable_member_code_lens = true,
+--     jsx_close_tag = {
+--       enable = false,
+--       filetypes = { "javascriptreact", "typescriptreact" },
+--     },
+--   },
+-- })
 
 local null_ls = require("null-ls")
 require("mason-null-ls").setup({
@@ -287,6 +296,7 @@ wk.add({
   { "<space>,", "<cmd>Lspsaga finder<CR>", desc = "LSP: Open LspSaga Finder" },
 })
 
+local is_mapped_lsp = false
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -295,6 +305,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Enable completion triggered by <c-x><c-o>
     vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
+    if is_mapped_lsp then
+      return
+    end
+    is_mapped_lsp = true
     wk.add({
       { "gd", "<cmd>Lspsaga goto_definition<CR>", desc = "LSP: goto definition" },
       { "gD", "<cmd>Lspsaga peek_definition<CR>", desc = "LSP: peek definition" },
@@ -448,6 +462,6 @@ vim.g.rustaceanvim = {
         end, { buffer = bufnr, desc = "lsp: Format" })
       end
     end,
-    capabilities = capabilities
+    capabilities = capabilities,
   },
 }

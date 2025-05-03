@@ -3,3 +3,4 @@ old
 # 管理対象外のファイル
 lazy-lock.json
 .gitconfig
+.sdkmanrc

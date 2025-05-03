@@ -9,6 +9,15 @@ map("n", "gz*", "<Plug>(asterisk-gz*)", { noremap = false })
 map("n", "z#", "<Plug>(asterisk-#)", { noremap = false })
 map("n", "gz#", "<Plug>(asterisk-gz#)", { noremap = false })
 
+map("i", "<c-p>", "<Up>")
+map("i", "<c-n>", "<Down>")
+map("i", "<c-f>", "<Right>")
+map("i", "<c-b>", "<Left>")
+map("i", "<c-a>", "<Home>")
+map("i", "<c-e>", "<End>")
+map("i", "<c-h>", "<BS>")
+map("i", "<c-d>", "<Del>")
+
 if require("utils").is_vscode() then
   local vscode = require("vscode")
   map("n", "<leader>ff", function()

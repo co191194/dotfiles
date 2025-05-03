@@ -74,7 +74,16 @@ local mappings = {
   end, "Extract Method"),
 }
 
-which_key.add(mappings)
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  group = vim.api.nvim_create_augroup("MyJavaMaps", {}),
+  pattern =  "*.java" ,
+  callback = function()
+    which_key.add(mappings)
+    which_key.add({
+      { lhs = "<space>f", rhs = "<cmd>Format<cr>", desc = "Java: Format" },
+    })
+  end,
+})
 
 -- If you want you can add here Old School Mappings. Me I setup Telescope, LSP and Lspsaga mapping somewhere else and I just reuse them
 

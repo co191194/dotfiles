@@ -1,0 +1,21 @@
+{
+  "paiza": {
+    "prefix": "paiza",
+    "body": [
+      "process.stdin.resume();",
+      "process.stdin.setEncoding('utf8');",
+      "var lines = [];",
+      "var reader = require('readline').createInterface({",
+      "\tinput: process.stdin,",
+      "\toutput: process.stdout",
+      "});",
+      "reader.on('line', (line) => {",
+      "\tlines.push(line);",
+      "});",
+      "reader.on('close', () => {",
+      "",
+      "});"
+    ],
+    "description": "vue3 setup template"
+  }
+}

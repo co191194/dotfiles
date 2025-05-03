@@ -1,6 +1,17 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
 
+function rename_workspace()
+	return act.PromptInputLine({
+		description = "Set WorkSpace Title: ",
+		action = wezterm.action_callback(function(win, pain, line)
+			if line then
+				wezterm.mux.rename_workspace(wezterm.mux.get_active_workspace(), line)
+			end
+		end),
+	})
+end
+
 return {
 	keys = {
 		{ key = "Tab", mods = "CTRL", action = act.ActivateTabRelative(1) },
@@ -144,7 +155,21 @@ return {
 		{ key = "k", mods = "LEADER|CTRL", action = act.ActivatePaneDirection("Up") },
 		{ key = "j", mods = "LEADER|CTRL", action = act.ActivatePaneDirection("Down") },
 		{ key = "a", mods = "LEADER|CTRL", action = act.ActivatePaneDirection("Next") },
-    { key = "f", mods = "LEADER|CTRL", action = act.EmitEvent("toggle-font-size") },
+		{ key = "f", mods = "LEADER|CTRL", action = act.EmitEvent("toggle-font-size") },
+		{
+			key = "o",
+			mods = "LEADER",
+			action = act.ShowLauncherArgs({ flags = "WORKSPACES", title = "Select WorkSapce" }),
+		},
+		{
+			key = "o",
+			mods = "LEADER|CTRL",
+			action = act.ShowLauncherArgs({ flags = "WORKSPACES", title = "Select WorkSapce" }),
+		},
+		{ key = "r", mods = "LEADER", action = rename_workspace() },
+		{ key = "r", mods = "LEADER|CTRL", action = rename_workspace() },
+    { key = "[", mods = "LEADER|CTRL", action = act.SwitchWorkspaceRelative(-1)},
+    { key = "]", mods = "LEADER|CTRL", action = act.SwitchWorkspaceRelative(1)},
 	},
 
 	key_tables = {

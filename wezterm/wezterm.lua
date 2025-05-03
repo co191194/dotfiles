@@ -2,7 +2,7 @@
 require("format")
 -- status settings
 require("status")
--- require("event")
+require("event")
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 
@@ -20,7 +20,7 @@ elseif host_env == "Linux" then
 elseif host_env == "Darwin" then
 end
 
-config.font_size = 12.0
+config.font_size = 16.0
 config.font = wezterm.font_with_fallback({
   "Hack Nerd Font",
   "源柔ゴシック等幅",
@@ -28,7 +28,7 @@ config.font = wezterm.font_with_fallback({
 
 config.window_frame = {
 	font = wezterm.font({ family = "Hack Nerd Font", weight = "Bold" }),
-	font_size = 12.0,
+	font_size = 16.0,
 }
 
 config.disable_default_key_bindings = true

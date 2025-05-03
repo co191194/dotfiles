@@ -1,3 +1,4 @@
+local is_mapped = false
 require("gitsigns").setup({
   signs = {
     add = { text = " │" },
@@ -38,6 +39,10 @@ require("gitsigns").setup({
     col = 1,
   },
   on_attach = function(_)
+    if is_mapped then
+      return
+    end
+    is_mapped = true
     local gs = package.loaded.gitsigns
 
     local map = vim.keymap.set

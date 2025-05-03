@@ -1,0 +1,15 @@
+{
+  "paiza": {
+    "prefix": "paiza",
+    "body": [
+      "#include <iostream>",
+      "using namespace std;",
+      "",
+      "int main(void){",
+      "\t",
+      "\treturn 0;",
+      "}"
+    ],
+    "description": "vue3 setup template"
+  }
+}

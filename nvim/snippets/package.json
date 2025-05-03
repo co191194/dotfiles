@@ -1,5 +1,7 @@
 {
-  "categories": ["Snippets"],
+  "categories": [
+    "Snippets"
+  ],
   "name": "my-snippets",
   "contributes": {
     "snippets": [
@@ -14,6 +16,24 @@
           "vue"
         ],
         "path": "vue.json"
+      },
+      {
+        "language": [
+          "java"
+        ],
+        "path": "java.json"
+      },
+      {
+        "language": [
+          "cpp"
+        ],
+        "path": "cpp.json"
+      },
+      {
+        "language": [
+          "javascript"
+        ],
+        "path": "javascript.json"
       }
     ]
   }

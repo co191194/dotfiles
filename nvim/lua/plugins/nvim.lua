@@ -1,13 +1,3 @@
--- Get platform dependant build script
-local function tabnine_build_path()
-  -- Replace vim.uv with vim.loop if using NVIM 0.9.0 or below
-  if vim.uv.os_uname().sysname == "Windows_NT" then
-    return "pwsh.exe -file .\\dl_binaries.ps1"
-  else
-    return "./dl_binaries.sh"
-  end
-end
-
 return {
   -- { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' },
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -30,7 +20,6 @@ return {
       require("configs.nvim-treesitter")
     end,
   },
-  "vim-scripts/ScrollColors",
   "sainnhe/everforest",
   "tomasiser/vim-code-dark",
   {
@@ -92,6 +81,23 @@ return {
     -- end,
   },
   {
+    "zbirenbaum/copilot.lua",
+    config = function()
+      require("configs.copilot")
+    end,
+  },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" },
+      { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+    },
+    build = "make tiktoken", -- Only on MacOS or Linux
+    config = function()
+      require("configs.copilot-chat")
+    end,
+  },
+  {
     "L3MON4D3/LuaSnip",
     version = "v2.*",
     dependencies = {
@@ -113,9 +119,14 @@ return {
       "hrsh7th/cmp-cmdline",
       "onsails/lspkind.nvim",
       "hrsh7th/cmp-nvim-lsp-signature-help",
+      "zbirenbaum/copilot-cmp",
     },
   },
-  { "mfussenegger/nvim-jdtls" },
+  -- { "mfussenegger/nvim-jdtls" },
+  {
+    "nvim-java/nvim-java",
+    config = false,
+  },
   {
     "folke/lazydev.nvim",
     ft = "lua",
@@ -261,15 +272,23 @@ return {
       require("configs.auto-session")
     end,
   },
+  -- {
+  --   "romgrk/barbar.nvim",
+  --   dependencies = {
+  --     "lewis6991/gitsigns.nvim",     -- OPTIONAL: for git status
+  --     "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
+  --   },
+  --   version = "^1.0.0",              -- optional: only update when a new 1.x version is released
+  --   config = function()
+  --     require("configs.barbar")
+  --   end,
+  -- },
   {
-    "romgrk/barbar.nvim",
-    dependencies = {
-      "lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
-      "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
-    },
-    version = "^1.0.0", -- optional: only update when a new 1.x version is released
+    "akinsho/bufferline.nvim",
+    version = "*",
+    dependencies = "nvim-tree/nvim-web-devicons",
     config = function()
-      require("configs.barbar")
+      require("configs.bufferline")
     end,
   },
   {
@@ -338,5 +357,19 @@ return {
     config = function()
       require("configs.nvim-ts-autotag")
     end,
+  },
+  {
+    "ray-x/go.nvim",
+    dependencies = { -- optional packages
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("configs.go")
+    end,
+    event = { "CmdlineEnter" },
+    ft = { "go", "gomod" },
+    -- build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
   },
 }
