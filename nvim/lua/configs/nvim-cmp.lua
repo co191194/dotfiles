@@ -39,7 +39,14 @@ else
     },
     sources = cmp.config.sources({
       { name = "lazydev" },
-      { name = "nvim_lsp" },
+      {
+        name = "nvim_lsp",
+        option = {
+          markdown_oxide = {
+            keyword_pattern = [[\(\k\| \|\/\|#\)\+]],
+          },
+        },
+      },
       { name = "nvim_lsp_signature_help" },
       { name = "luasnip" },
       { name = "path" },
