@@ -118,7 +118,7 @@ vim.lsp.config("yamlls", {
 
 -- markdown
 vim.lsp.config("markdown_oxide", {
-  capabilities = capabilities
+  capabilities = capabilities,
 })
 vim.lsp.enable("markdown_oxide")
 
@@ -156,25 +156,40 @@ require("mason-null-ls").setup({
 local lsp_format = function(bufnr)
   vim.lsp.buf.format({
     filter = function(client)
-      return client.name == "null-ls" or "rust-analyzer"
+      local list = { "null-ls", "rust-analyzer", "ruff" }
+      for _, m in ipairs(list) do
+        if m == client.name then
+          return true
+        end
+      end
+      return false
     end,
     bufnr = bufnr,
   })
 end
+
+local function on_attach_format(client, bufnr)
+  if client.supports_method("textDocument/formatting") then
+    vim.keymap.set("n", "<space>f", function()
+      lsp_format(bufnr)
+    end, { buffer = bufnr, desc = "lsp: Format" })
+  end
+  if client.supports_method("textDocument/rangeFormatting") then
+    vim.keymap.set("x", "<space>f", function()
+      vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+    end, { buffer = bufnr, desc = "lsp: Format" })
+  end
+end
+
 null_ls.setup({
-  on_attach = function(client, bufnr)
-    if client.supports_method("textDocument/formatting") then
-      vim.keymap.set("n", "<space>f", function()
-        lsp_format(bufnr)
-      end, { buffer = bufnr, desc = "lsp: Format" })
-    end
-    if client.supports_method("textDocument/rangeFormatting") then
-      vim.keymap.set("x", "<space>f", function()
-        vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
-      end, { buffer = bufnr, desc = "lsp: Format" })
-    end
-  end,
+  on_attach = on_attach_format,
   sources = {},
+})
+
+-- ruff
+vim.lsp.config("ruff", {
+  settings = {},
+  on_attach = on_attach_format,
 })
 
 local map = vim.keymap.set
